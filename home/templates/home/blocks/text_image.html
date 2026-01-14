@@ -1,0 +1,20 @@
+{% load wagtailimages_tags wagtailcore_tags %}
+<section {% if value.anchor %}id="{{ value.anchor }}"{% endif %}  class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">{{ value.title }}</h2>
+        <div class="grid md:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+            <div class="rich-text">
+                {{ value.text|richtext }}
+                {% if value.show_button and value.button_page %}
+                    <div class="mt-8">
+                        <a href="{{ value.button_page.url }}" class="btn-primary inline-block px-8 py-4 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            {{ value.button_text }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            {% image value.image max-600x400 as sec_img %}
+            <img src="{{ sec_img.url }}" alt="{{ value.title }}" class="w-full rounded-lg shadow-lg">
+        </div>
+    </div>
+</section>

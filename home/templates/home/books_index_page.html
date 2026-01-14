@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<div class="container max-w-7xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-center mb-8 text-indigo-900">{{ page.title }}</h1>
+
+    {% if page.intro %}
+        <div class="prose prose-lg max-w-4xl mx-auto mb-12 text-center">
+            {{ page.intro|richtext }}
+        </div>
+    {% endif %}
+
+    {% if books %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for doc in books %}
+                <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col">
+                    <h3 class="text-2xl font-bold text-indigo-900 mb-4">{{ doc.title|default:doc.filename }}</h3>
+
+                    <div class="text-gray-600 space-y-2 mb-6">
+                        <p><strong>Формат:</strong> {{ doc.file.extension|upper }}</p>
+                        <p><strong>Размер:</strong> {{ doc.file.size|filesizeformat }}</p>
+                        <p><strong>Загружен:</strong> {{ doc.created_at|date:"d.m.Y" }}</p>
+                    </div>
+
+                    <a href="{{ doc.url }}" 
+                       download 
+                       class="mt-auto inline-block px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition text-center">
+                        Скачать
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-gray-500 py-12 text-xl">Документов с тегом «book» пока нет.</p>
+    {% endif %}
+</div>
+{% endblock %}

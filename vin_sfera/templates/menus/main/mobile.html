@@ -1,0 +1,18 @@
+{% load menu_tags %}
+
+<nav class="flex flex-col space-y-6 text-lg font-medium">
+    {% for item in menu_items %}
+        <div>
+            <a href="{{ item.href }}"
+               class="text-white hover:text-cyan-300 transition block {% if item.is_active %}font-bold{% endif %}">
+                {{ item.text }}
+            </a>
+
+            {% if item.has_children_in_menu %}
+                <div class="ml-6 mt-2 space-y-3">
+                    {% sub_menu item max_levels=2 template="menus/main/sub_menu_mobile.html" %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</nav>

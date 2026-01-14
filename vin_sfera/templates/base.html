@@ -1,0 +1,119 @@
+{% load static wagtailsettings_tags %}
+{% get_settings use_default_site=True as settings %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailsettings_tags wagtailimages_tags menu_tags %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы{% endblock %}">
+    <title>{% block title %}Сфера Сознания{% endblock %} | Центр космоэнергетики и кинезиологии</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="antialiased text-gray-800 bg-gray-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Overlay для мобильного меню -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 hidden"></div>
+
+    <!-- Хедер -->
+    <header class="bg-cyan-700 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between py-4">
+                <!-- Логотип -->
+                <a href="/" class="flex items-center">
+                    <img src="{% static '/home/images/logo.jpg' %}" alt="Логотип Сфера Сознания" class="w-14 h-14 object-cover rounded-full ring-4 ring-cyan-500/30">
+                </a>
+
+               
+               <!-- Десктоп меню — добавляем обёртку с responsive-классами -->
+                <nav class="hidden md:flex items-center space-x-8 text-lg font-medium">
+                    {% main_menu max_levels=1 template="menus/main/desktop.html" %}
+                </nav>
+
+
+                <!-- Бургер -->
+                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                    <svg class="h-8 w-8 open-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg class="h-8 w-8 close-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Мобильное меню (сайдбар) -->
+            <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-cyan-800 z-50 pt-20 px-6 -translate-x-full transition-transform duration-300 overflow-y-auto">
+           	{% main_menu max_levels=2 template="menus/main/mobile.html" %}
+	    </div>
+        </div>
+    </header>
+
+    <!-- JS для мобильного меню -->
+    <script>
+        const button = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('mobile-overlay');
+        const openIcon = button.querySelector('.open-icon');
+        const closeIcon = button.querySelector('.close-icon');
+
+        button.addEventListener('click', () => {
+            menu.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+            openIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        });
+
+        overlay.addEventListener('click', () => button.click());
+    </script>
+
+    <!-- Сообщения (исправленный блок) -->
+    {% if messages %}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+            {% for message in messages %}
+                <div class="{% if message.tags == 'success' %}bg-green-50 border-green-200 text-green-800{% else %}bg-red-50 border-red-200 text-red-800{% endif %} border rounded-lg p-4 mb-4 shadow-sm">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Контент -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center space-x-10 mb-8">
+		{% with settings=settings.base.NavigationSettings %}    
+                {% if settings.vk_url and settings.vk_icon %}
+                    <a href="{{ settings.vk_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition">
+                        {% image settings.vk_icon width-48 as vk_img %}
+                        <img src="{{ vk_img.url }}" alt="VK" class="w-12 h-12">
+                    </a>
+                {% endif %}
+
+                {% if settings.facebook_url and settings.facebook_icon %}
+                    <a href="{{ settings.facebook_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition">
+                        {% image settings.facebook_icon width-48 as fb_img %}
+                        <img src="{{ fb_img.url }}" alt="Facebook" class="w-12 h-12">
+                    </a>
+                {% endif %}
+
+                {% if settings.instagram_url and settings.instagram_icon %}
+                    <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition">
+                        {% image settings.instagram_icon width-48 as ig_img %}
+                        <img src="{{ ig_img.url }}" alt="Instagram" class="w-12 h-12">
+                    </a>
+                {% endif %}
+            	{% endwith %}
+	    </div>
+            <p class="text-lg">&copy; 2025 Сфера Сознания. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

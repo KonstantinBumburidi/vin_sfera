@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div class="container max-w-7xl mx-auto px-4 py-12">
+    {% if page.intro %}
+        <div class="prose prose-lg max-w-4xl mx-auto mb-12 text-center">
+            {{ page.intro|richtext }}
+        </div>
+    {% endif %}
+
+    <h1 class="text-4xl font-bold text-center mb-12 text-indigo-900">Видео</h1>
+
+    <div class="flex flex-col lg:flex-row gap-12">
+        <!-- Основная часть — сетка видео -->
+        <div class="flex-grow">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for video in videos %}
+                    <a href="{% pageurl video %}" class="block group">
+                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
+                            {% if video.main_image %}
+                                {% image video.main_image fill-600x400 as thumb %}
+                                <img src="{{ thumb.url }}" alt="{{ video.title }}" class="w-full h-64 object-cover">
+                            {% else %}
+                                <div class="bg-gray-200 h-64 flex items-center justify-center text-gray-500">Нет превью</div>
+                            {% endif %}
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-indigo-600">{{ video.title }}</h3>
+                                {% if video.intro %}
+                                    <p class="text-gray-600 mb-4">{{ video.intro|truncatewords:20 }}</p>
+                                {% endif %}
+                                <div class="flex justify-between text-sm text-gray-500">
+                                    <span>{{ video.views }} просмотров</span>
+                                    {% if video.category %}
+                                        <span class="text-indigo-600 font-medium">{{ video.category.title }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% empty %}
+                    <p class="col-span-full text-center text-gray-500 py-12">Нет видео в этой категории.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Сайдбар с категориями (sticky на десктопе) -->
+        <aside class="lg:w-80">
+            <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
+                <h3 class="text-2xl font-bold mb-6 text-indigo-900">Категории</h3>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="{% pageurl page %}" class="flex justify-between items-center py-2 px-4 rounded-lg hover:bg-indigo-50 {% if not request.GET.category %}bg-indigo-100 font-bold{% endif %}">
+                            <span>Все видео</span>
+                            <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">{{ videos|length }}</span>
+                        </a>
+                    </li>
+                    {% for cat in categories %}
+                        <li>
+                            <a href="{% pageurl page %}?category={{ cat.id }}" class="flex justify-between items-center py-2 px-4 rounded-lg hover:bg-indigo-50 {% if request.GET.category == cat.id|stringformat:"s" %}bg-indigo-100 font-bold{% endif %}">
+                                <span>{{ cat.title }}</span>
+                                <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">{{ cat.video_count }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

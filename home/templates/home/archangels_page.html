@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div class="container max-w-7xl mx-auto px-4 py-12">
+    <h1 class="text-5xl font-bold text-center mb-8 text-indigo-900">
+        {{ page.title }}
+    </h1>
+
+    {% if page.intro %}
+        <div class="prose prose-lg max-w-4xl mx-auto mb-12 text-gray-700">
+            {{ page.intro|richtext }}
+        </div>
+    {% endif %}
+
+    <div class="overflow-x-auto shadow-2xl rounded-2xl">
+        <table class="min-w-full bg-white">
+            <thead class="bg-gradient-to-r from-indigo-600 to-purple-700 text-white">
+                <tr>
+                    <th class="px-8 py-6 text-left text-lg font-semibold">ID</th>
+                    <th class="px-8 py-6 text-left text-lg font-semibold">Название</th>
+                    <th class="px-8 py-6 text-left text-lg font-semibold">Описание</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for row in page.table_rows.all %}
+                <tr class="hover:bg-indigo-50 transition-colors duration-200">
+                    <td class="px-8 py-6 text-lg font-medium text-gray-900">{{ row.number }}</td>
+                    <td class="px-8 py-6 text-lg font-semibold text-gray-800">{{ row.name }}</td>
+                    <td class="px-8 py-6 text-lg text-gray-700">{{ row.description }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="px-8 py-12 text-center text-gray-500">Таблица пуста</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

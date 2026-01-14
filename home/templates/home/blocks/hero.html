@@ -1,0 +1,17 @@
+{% load wagtailimages_tags %}
+
+<div class="relative overflow-hidden">
+    {% image value.image fill-1920x1080 as hero_img %}
+    <!-- Затемнение -->
+    <div class="absolute inset-0 bg-black/50"></div>
+    <!-- Фоновое изображение -->
+    <img src="{{ hero_img.url }}"
+         alt="{{ value.title }}"
+         class="w-full h-[80vh] md:h-[700px] object-cover object-center">
+    <!-- Заголовок по центру -->
+    <div class="absolute inset-0 flex items-center justify-center">
+        <h1 class="text-white text-4xl md:text-6xl lg:text-7xl font-bold text-center px-6 drop-shadow-2xl">
+            {{ value.title }}
+        </h1>
+    </div>
+</div>

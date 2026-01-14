@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+    {# Новый контент из блоков #}
+    {% for block in page.content_blocks %}
+        {% include_block block %}
+    {% endfor %}
+{% endblock %}

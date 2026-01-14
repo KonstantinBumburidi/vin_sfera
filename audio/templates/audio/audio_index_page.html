@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div class="container max-w-7xl mx-auto px-4 py-12">
+    {% if page.intro %}
+        <div class="prose prose-lg max-w-4xl mx-auto mb-12 text-center text-gray-700">
+            {{ page.intro|richtext }}
+        </div>
+    {% endif %}
+
+    <h1 class="text-4xl font-bold text-center mb-12 text-indigo-900">Аудио уроки и медитации</h1>
+
+    <div class="flex flex-col lg:flex-row gap-12">
+        <!-- Grid аудио -->
+        <div class="flex-grow">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for audio in audios %}
+                    <a href="{% pageurl audio %}" class="block group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+                        {% if audio.main_image %}
+                            {% image audio.main_image fill-600x600 as cover %}
+                            <img src="{{ cover.url }}" alt="{{ audio.title }}" class="w-full aspect-square object-cover">
+                        {% else %}
+                            <div class="bg-gradient-to-br from-indigo-200 to-purple-200 aspect-square flex items-center justify-center text-gray-600">Обложка</div>
+                        {% endif %}
+                        <!-- Overlay play -->
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg class="w-24 h-24 text-white drop-shadow-2xl" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6 4l8 6-8 6V4z"/>
+                            </svg>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
+                            <h3 class="text-2xl font-bold text-white">{{ audio.title }}</h3>
+                            {% if audio.duration %}
+                                <p class="text-white text-opacity-90">{{ audio.duration }}</p>
+                            {% endif %}
+                            {% if audio.category %}
+                                <p class="text-indigo-300 mt-1">{{ audio.category.title }}</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% empty %}
+                    <p class="col-span-full text-center text-gray-500 py-12">Нет аудио в этой категории.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Сайдбар категорий (как в видео) -->
+        <aside class="lg:w-80">
+            <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
+                <h3 class="text-2xl font-bold mb-6 text-indigo-900">Категории</h3>
+                <ul class="space-y-3">
+                    <li><a href="{% pageurl page %}" class="flex justify-between py-2 px-4 rounded-lg hover:bg-indigo-50 {% if not request.GET.category %}bg-indigo-100 font-bold{% endif %}">
+                        <span>Все уроки</span>
+                        <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">{{ audios|length }}</span>
+                    </a></li>
+                    {% for cat in categories %}
+                        <li><a href="{% pageurl page %}?category={{ cat.id }}" class="flex justify-between py-2 px-4 rounded-lg hover:bg-indigo-50 {% if request.GET.category == cat.id|stringformat:"s" %}bg-indigo-100 font-bold{% endif %}">
+                            <span>{{ cat.title }}</span>
+                            <span class="bg-gray-200 px-3 py-1 rounded-full text-sm">{{ cat.audio_count }}</span>
+                        </a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

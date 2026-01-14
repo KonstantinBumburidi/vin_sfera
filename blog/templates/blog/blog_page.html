@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% block body_class %}template-blogpage{% endblock %}
+{% block content %}
+
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 max-w-7xl w-full">
+            <div class="bg-white rounded shadow p-6">
+                <!-- Заголовок и картинка -->
+                <div class="flex flex-col md:flex-row md:items-start md:space-x-6">
+                    <div class="flex-1">
+                        <h1 class="text-2xl md:text-4xl font-bold mb-4">{{ page.title }}</h1>
+                        <p class="text-sm text-gray-600 mb-4">{{ page.date|date:"d.m.Y" }} | {{ page.author }}</p>
+                    </div>
+                    {% if page.main_image %}
+                        {% image page.main_image width-200 as thumb_image %}
+                        <img src="{{ thumb_image.url }}" alt="{{ page.title }}" class="w-full md:w-48 h-48 object-cover rounded mb-4 md:mb-0">
+                    {% endif %}
+                </div>
+                <!-- Текст статьи -->
+                <div class="text-base md:text-lg text-gray-800 mt-4">
+                    {{ page.body|richtext }}
+                </div>
+                <p class="mt-6"><a href="{% pageurl page.get_parent %}" class="text-blue-600 hover:underline">Вернуться к блогу</a></p>
+            </div>
+        </div>
+    </section>
+{% endblock %}

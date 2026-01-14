@@ -1,0 +1,18 @@
+{% load menu_tags %}
+
+<ul class="flex items-center space-x-8 text-lg font-medium">
+    {% for item in menu_items %}
+        <li class="{% if item.has_children_in_menu %}relative group{% endif %}">
+            <a href="{{ item.href }}"
+               class="text-white hover:text-cyan-300 transition {% if item.is_active %}font-bold underline{% endif %}">
+                {{ item.text }}
+            </a>
+
+            {% if item.has_children_in_menu %}
+                <ul class="absolute left-0 top-full mt-2 hidden group-hover:block bg-cyan-700 rounded-lg shadow-lg py-2 min-w-48">
+                    {% sub_menu item max_levels=2 template="menus/main/sub_menu.html" %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

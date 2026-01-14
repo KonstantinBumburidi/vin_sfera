@@ -1,0 +1,21 @@
+{{% load wagtailcore_tags %}
+
+<div {% if value.anchor %}id="{{ value.anchor }}"{% endif %}  class="bg-white rounded-lg shadow-lg p-8 mb-12 max-w-5xl mx-auto">
+    {% if value.title %}
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-cyan-700 text-center">
+            {{ value.title }}
+        </h2>
+    {% endif %}
+
+    {% if value.description %}
+        <div class="text-lg md:text-xl text-gray-600 mb-8 text-center max-w-3xl mx-auto">
+            {{ value.description|richtext }}
+        </div>
+    {% endif %}
+
+    {% if value.content %}
+        <div class="prose prose-lg max-w-none text-gray-800">
+            {{ value.content|richtext }}
+        </div>
+    {% endif %}
+</div>

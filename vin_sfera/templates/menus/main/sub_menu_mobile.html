@@ -1,0 +1,6 @@
+{% for item in menu_items %}
+    <a href="{{ item.href }}"
+       class="text-white/80 hover:text-cyan-300 transition block text-base {% if item.is_active %}font-bold{% endif %}">
+        {{ item.text }}
+    </a>
+{% endfor %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div class="container max-w-7xl mx-auto px-4 py-12">
+    {% if page.intro %}
+        <div class="prose prose-lg max-w-4xl mx-auto mb-12 text-gray-700">
+            {{ page.intro|richtext }}
+        </div>
+    {% endif %}
+
+    <h1 class="text-4xl font-bold text-center mb-12 text-indigo-900">
+        {% if page.section_type == 1 %}
+            Матрицы световых частот
+        {% else %}
+            Блоки космоэнергетики
+        {% endif %}
+    </h1>
+
+    <!-- Аккордеон групп (нативный HTML5 + Tailwind) -->
+    <div class="space-y-6">
+        {% for group in groups %}
+            <details class="group bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300">
+                <summary class="flex items-center justify-between p-6 cursor-pointer hover:bg-indigo-50 transition-colors">
+                    <div class="flex items-center space-x-6">
+                        {% if group.image %}
+                            {% image group.image fill-120x120 as group_img %}
+                            <img src="{{ group_img.url }}" alt="{{ group.title }}" class="w-20 h-20 rounded-lg object-cover">
+                        {% endif %}
+                        <div>
+                            <h2 class="text-2xl font-semibold text-gray-900">{{ group.title }}</h2>
+                            {% if group.description %}
+                                <p class="text-gray-600 mt-1">{{ group.description }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <svg class="w-6 h-6 text-indigo-600 transform transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </summary>
+
+                <div class="border-t border-gray-200 px-6 py-8 bg-gray-50">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-300">
+                            <thead>
+                                <tr class="bg-indigo-100">
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">№</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Название</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-900">Краткое описание</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                {% for channel in group.channels.all %}
+                                    <tr>
+                                        <td class="px-4 py-4 text-sm text-gray-700">{{ forloop.counter }}</td>
+                                        <td class="px-4 py-4 text-sm font-medium text-gray-900">
+                                            <details class="group">
+                                                <summary class="cursor-pointer hover:text-indigo-600 inline-flex items-center">
+                                                    {{ channel.name }}
+                                                    <svg class="w-4 h-4 ml-2 transform transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                    </svg>
+                                                </summary>
+                                                {% if channel.content %}
+                                                    <div class="mt-4 prose prose-sm max-w-none text-gray-700">
+                                                        {{ channel.content|richtext }}
+                                                    </div>
+                                                {% endif %}
+                                            </details>
+                                        </td>
+                                        <td class="px-4 py-4 text-sm text-gray-600">
+                                            {{ channel.description|default:"—" }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </details>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
