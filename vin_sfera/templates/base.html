@@ -2,6 +2,7 @@
 {% get_settings use_default_site=True as settings %}
 {% load wagtailcore_tags wagtailimages_tags %}
 {% load static wagtailcore_tags wagtailsettings_tags wagtailimages_tags menu_tags %}
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -9,6 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block meta_description %}Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы{% endblock %}">
     <title>{% block title %}Сфера Сознания{% endblock %} | Центр космоэнергетики и кинезиологии</title>
+    {% load wagtailmetadata_tags %}
+    {% meta_tags %} 
+
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="antialiased text-gray-800 bg-gray-100 font-sans min-h-screen flex flex-col">

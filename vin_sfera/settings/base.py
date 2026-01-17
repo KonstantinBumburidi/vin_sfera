@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.contrib.settings",
+    "wagtail.contrib.sitemaps",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtailmenus",
+    "wagtailmetadata",
     "wagtail",
 
     "modelcluster",
@@ -187,6 +189,7 @@ WAGTAIL_SITE_NAME = "vin_sfera"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
+
 WAGTAILSEARCH_BACKENDS = {
     "default": {
         "BACKEND": "wagtail.search.backends.database",
@@ -202,3 +205,5 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 # if untrusted users are allowed to upload files -
 # see https://docs.wagtail.org/en/stable/advanced_topics/deploying.html#user-uploaded-files
 WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip', 'mp3']
+WAGTAILMETADATA_IMAGE_FILTER = 'fill-1200x630'
+
