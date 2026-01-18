@@ -9,6 +9,7 @@ from channels.models import ChannelGroup
 from wagtail.blocks import StructBlock, CharBlock, PageChooserBlock
 from modelcluster.fields import ParentalKey
 from wagtail.documents.models import Document
+from wagtailmetadata.models import MetadataPageMixin
 
 #-----------------------------------------------------------------------------------
 # структурные блоки
@@ -69,7 +70,7 @@ class WidthButtonBlock(StructBlock):
         label = "Полноширинная кнопка"
 
 #-----------------------------------------------------------------------------------
-class HomePage(Page):
+class HomePage(MetadataPageMixin, Page):
     content_blocks = StreamField([
         ('hero', HeroBlock()),
         ('section', TextImageBlock()),
@@ -81,7 +82,7 @@ class HomePage(Page):
         FieldPanel('content_blocks'),   # новое поле
     ]
 
-class SectionPage(Page):
+class SectionPage(MetadataPageMixin, Page):
     # Можно добавить свои поля, например описание, изображения и т.д.
     intro = RichTextField(blank=True, verbose_name="Краткое введение")
     body = StreamField([
@@ -98,7 +99,7 @@ class SectionPage(Page):
     # Ограничиваем, чтобы эти страницы были только дочерними главной
     parent_page_types = ['home.HomePage']
 
-class ChannelSectionPage(Page):
+class ChannelSectionPage(MetadataPageMixin, Page):
     intro = RichTextField(blank=True, verbose_name="Введение ")
 
     section_type = models.PositiveSmallIntegerField(

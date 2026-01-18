@@ -17,7 +17,7 @@ import os
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = PROJECT_DIR.parent
 
-ALLOWED_HOSTS = ['77.246.247.35','al-sfera.kz','www.al-sfera.kz','127.0.0.1','api.ipify.org']
+ALLOWED_HOSTS = ['77.246.247.35','al-sfera.kz','www.al-sfera.kz','127.0.0.1','localhost','api.ipify.org']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.contrib.settings",
+    "wagtail.contrib.sitemaps",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtailmenus",
+    "wagtailmetadata",
     "wagtail",
 
     "modelcluster",
@@ -58,6 +60,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
 
     "blog",
     "channels",
@@ -154,6 +157,8 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
+SITE_ID = 1
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
@@ -187,6 +192,7 @@ WAGTAIL_SITE_NAME = "vin_sfera"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
+
 WAGTAILSEARCH_BACKENDS = {
     "default": {
         "BACKEND": "wagtail.search.backends.database",
@@ -195,10 +201,12 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "http://example.com"
+WAGTAILADMIN_BASE_URL = "http://127.0.0.1:8000"
 
 # Allowed file extensions for documents in the document library.
 # This can be omitted to allow all files, but note that this may present a security risk
 # if untrusted users are allowed to upload files -
 # see https://docs.wagtail.org/en/stable/advanced_topics/deploying.html#user-uploaded-files
 WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip', 'mp3']
+WAGTAILMETADATA_IMAGE_FILTER = 'fill-1200x630'
+

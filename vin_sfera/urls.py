@@ -5,6 +5,11 @@ from django.contrib import admin
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
+from wagtail.contrib.sitemaps.views import sitemap
+
+# from django.contrib.sitemaps.views import sitemap as django_sitemap_view
+# from home.sitemaps import sitemaps as custom_sitemaps  # ← импорт твоего
+
 
 from search import views as search_views
 
@@ -13,6 +18,8 @@ urlpatterns = [
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("search/", search_views.search, name="search"),
+    # path('sitemap.xml', django_sitemap_view, {'sitemaps': custom_sitemaps}, name='wagtail_sitemap'),
+   path('sitemap.xml', sitemap, name='wagtail_sitemap'),
 ]
 
 

@@ -1,33 +1,35 @@
-# Виртуальное окружение
+# Python/Django
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.pyc
+*.pyo
+*.pyd
+.env
 venv/
 env/
 ENV/
 
-# Python/Django кэш
-__pycache__/
-*.py[cod]
-*.pyc
-*.pyo
-*.pyd
-*.sqlite3
-*.log
-
-# Wagtail media (не коммитим загруженные изображения/документы)
+# Wagtail media (не коммить реальные файлы, только структуру)
 media/original_images/
 media/images/
 media/documents/
 
-# Static после collectstatic
+# Static и collectstatic
 staticfiles/
+static
 static/CACHE/
 
-# IDE и OS
+# Логи и дампы
+*.log
+db.sqlite3
+dump*.json
+
+# IDE
 .idea/
 .vscode/
 *.sublime-workspace
+
+# OS
 .DS_Store
 Thumbs.db
-
-# Секреты
-.env
-local_settings.py
