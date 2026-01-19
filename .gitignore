@@ -14,6 +14,7 @@ ENV/
 media/original_images/
 media/images/
 media/documents/
+media/audio/
 
 # Static и collectstatic
 staticfiles/
