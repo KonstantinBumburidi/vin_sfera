@@ -124,7 +124,7 @@ class ChannelSectionPage(MetadataPageMixin, Page):
         return context
 
 #-----------------------------------------------------------
-class BooksIndexPage(Page):
+class BooksIndexPage(MetadataPageMixin, Page):
     intro = RichTextField(blank=True, verbose_name="Введение (текст сверху)")
 
     content_panels = Page.content_panels + [
@@ -166,7 +166,7 @@ class TableRow(Orderable):  # ← Orderable для сортировки в ад�
         return f"{self.number} — {self.name}"
 
 
-class ArchangelsPage(Page):  # ← если хочешь ArchangelsPage — просто переименуй
+class ArchangelsPage(MetadataPageMixin, Page):  # ← если хочешь ArchangelsPage — просто переименуй
     intro = RichTextField(blank=True, verbose_name="Введение ")
 
     content_panels = Page.content_panels + [

@@ -8,6 +8,7 @@ from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.models import Image  # Для main_image
 from wagtail.search import index
 from django.utils.text import slugify
+from wagtailmetadata.models import MetadataPageMixin
 
 from modelcluster.fields import ParentalKey
 # from modelcluster.models import Orderable  # Если галерея нужна позже, но пока нет
@@ -50,7 +51,7 @@ class Category(models.Model):  #
 
 # ------------------------------------------------------------
 # Индекс блога (список статей, с фильтром)
-class BlogIndexPage(Page):
+class BlogIndexPage(MetadataPageMixin, Page):
     intro = RichTextField(blank=True, verbose_name="Введение")
 
     content_panels = Page.content_panels + [
@@ -93,7 +94,7 @@ class BlogIndexPage(Page):
         verbose_name = "Индекс блога"
 
 # Страница статьи (как Article, но Page)
-class BlogPage(Page):
+class BlogPage(MetadataPageMixin, Page):
     date = models.DateField(verbose_name="Дата поста")
     intro = models.CharField(verbose_name="Краткое описание (preview)", max_length=250, blank=True)
     body = RichTextField(verbose_name="Содержание", blank=True)
