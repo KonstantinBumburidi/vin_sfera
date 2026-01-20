@@ -11,8 +11,9 @@ Disallow: /documents/download/
 Allow: /media/
 Allow: /static/
 
-# Sitemap
-Sitemap: https://al-sfera.kz/sitemap.xml
+Host: {{ host }}
+
+Sitemap: {{ sitemap_url }}
 
 # Специфичные боты
 User-agent: Yandex
