@@ -22,6 +22,7 @@ urlpatterns = [
     # path('sitemap.xml', django_sitemap_view, {'sitemaps': custom_sitemaps}, name='wagtail_sitemap'),
    path('sitemap.xml', sitemap, name='wagtail_sitemap'),
     path("robots.txt", robots_txt),
+    # path("", include("home.urls")),
 ]
 
 

@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-
-Disallow: /admin/
-Disallow: /django-admin/
-
-Sitemap: https://al-sfera.kz/sitemap.xml
