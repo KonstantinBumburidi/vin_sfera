@@ -10,6 +10,8 @@ from wagtail.blocks import StructBlock, CharBlock, PageChooserBlock
 from modelcluster.fields import ParentalKey
 from wagtail.documents.models import Document
 from wagtailmetadata.models import MetadataPageMixin
+from django.http import HttpResponse
+from django.template import loader
 
 #-----------------------------------------------------------------------------------
 # структурные блоки
@@ -165,7 +167,7 @@ class TableRow(Orderable):  # ← Orderable для сортировки в ад�
     def __str__(self):
         return f"{self.number} — {self.name}"
 
-
+#-----------------------------------------------------------
 class ArchangelsPage(MetadataPageMixin, Page):  # ← если хочешь ArchangelsPage — просто переименуй
     intro = RichTextField(blank=True, verbose_name="Введение ")
 
@@ -179,3 +181,4 @@ class ArchangelsPage(MetadataPageMixin, Page):  # ← если хочешь Arch
 
     class Meta:
         verbose_name = "Блок энергий 95 Архангелов"
+

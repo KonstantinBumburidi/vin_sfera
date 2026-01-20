@@ -6,6 +6,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.contrib.sitemaps.views import sitemap
+from home.views import robots_txt
 
 # from django.contrib.sitemaps.views import sitemap as django_sitemap_view
 # from home.sitemaps import sitemaps as custom_sitemaps  # ← импорт твоего
@@ -20,6 +21,7 @@ urlpatterns = [
     path("search/", search_views.search, name="search"),
     # path('sitemap.xml', django_sitemap_view, {'sitemaps': custom_sitemaps}, name='wagtail_sitemap'),
    path('sitemap.xml', sitemap, name='wagtail_sitemap'),
+    path("robots.txt", robots_txt),
 ]
 
 
