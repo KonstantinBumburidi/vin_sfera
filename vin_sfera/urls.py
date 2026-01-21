@@ -8,12 +8,10 @@ from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.contrib.sitemaps.views import sitemap
 from home.views import robots_txt
+from search import views as search_views
 
 # from django.contrib.sitemaps.views import sitemap as django_sitemap_view
 # from home.sitemaps import sitemaps as custom_sitemaps  # ← импорт твоего
-
-
-from search import views as search_views
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -21,7 +19,8 @@ urlpatterns = [
     path("documents/", include(wagtaildocs_urls)),
     path("search/", search_views.search, name="search"),
     # path('sitemap.xml', django_sitemap_view, {'sitemaps': custom_sitemaps}, name='wagtail_sitemap'),
-   path('sitemap.xml', sitemap, name='wagtail_sitemap'),
+    path('sitemap.xml', sitemap, name='wagtail_sitemap'),
+    path('accounts/', include('allauth.urls')),  # регистрация, логин, логаут и т.д.
     path("robots.txt", robots_txt),
     path('yandex_6da6814435e0cb91.html', TemplateView.as_view(
         template_name='yandex_6da6814435e0cb91.html',

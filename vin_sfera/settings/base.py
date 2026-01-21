@@ -62,6 +62,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',  # если позже захотите соцлогин
+
     "blog",
     "channels",
     "home",
@@ -80,7 +84,33 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Регистрация с подтверждением email
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"   # ("mandatory" ) обязательно подтверждение
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+# ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = False             # дополнительно отключаем любые попытки подтверждения
+
+# Email-бекенд (для разработки — в консоль)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Для продакшена потом замените на SMTP (например, Yandex/Gmail)
+
+LOGIN_REDIRECT_URL = '/'                   # куда после логина
+LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_SIGNUP_REDIRECT_URL = '/'
+
 
 ROOT_URLCONF = "vin_sfera.urls"
 
@@ -156,8 +186,6 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
-
-SITE_ID = 1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
