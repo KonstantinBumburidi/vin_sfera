@@ -9,7 +9,7 @@ def robots_txt(request):
         {
             "debug": settings.DEBUG,
             "sitemap_url": request.build_absolute_uri("/sitemap.xml"),
-            "host": request.get_host().split(":")[0],
+            # "host": request.get_host().split(":")[0],
         },
     )
     return HttpResponse(content, content_type="text/plain")

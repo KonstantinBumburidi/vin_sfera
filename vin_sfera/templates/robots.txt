@@ -11,7 +11,7 @@ Disallow: /documents/download/
 Allow: /media/
 Allow: /static/
 
-Host: {{ host }}
+# Host: {{ host }}
 
 Sitemap: {{ sitemap_url }}
 
