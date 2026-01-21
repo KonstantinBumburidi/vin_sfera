@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.urls import include, path
 from django.contrib import admin
+from django.views.generic import TemplateView  # ← добавить
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
@@ -22,7 +23,11 @@ urlpatterns = [
     # path('sitemap.xml', django_sitemap_view, {'sitemaps': custom_sitemaps}, name='wagtail_sitemap'),
    path('sitemap.xml', sitemap, name='wagtail_sitemap'),
     path("robots.txt", robots_txt),
-    # path("", include("home.urls")),
+    path('yandex_6da6814435e0cb91.html', TemplateView.as_view(
+        template_name='yandex_6da6814435e0cb91.html',
+        content_type='text/html'
+    )),
+
 ]
 
 
