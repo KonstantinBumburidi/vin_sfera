@@ -103,6 +103,15 @@ ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 # ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False             # дополнительно отключаем любые попытки подтверждения
 
+# Сессии Django — длительное запоминание
+SESSION_COOKIE_AGE = 31536000          # 1 год (можно уменьшить до 1209600 — 2 недели)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # не истекает при закрытии браузера
+SESSION_SAVE_EVERY_REQUEST = True      # обновляем срок сессии при каждом запросе
+
+# Allauth — всегда запоминать пользователя после логина
+ACCOUNT_SESSION_REMEMBER = True        # ← главное: всегда постоянная сессия
+ACCOUNT_LOGOUT_ON_GET = False          # защита от случайного выхода по GET
+
 # Email-бекенд (для разработки — в консоль)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Для продакшена потом замените на SMTP (например, Yandex/Gmail)

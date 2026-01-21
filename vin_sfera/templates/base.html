@@ -49,12 +49,21 @@
                     <img src="{% static '/home/images/logo.jpg' %}" alt="Логотип Сфера Сознания" class="w-14 h-14 object-cover rounded-full ring-4 ring-cyan-500/30">
                 </a>
 
-               
                <!-- Десктоп меню — добавляем обёртку с responsive-классами -->
                 <nav class="hidden md:flex items-center space-x-8 text-lg font-medium">
                     {% main_menu max_levels=1 template="menus/main/desktop.html" %}
                 </nav>
 
+                <!-- Пользовательская зонаудентификация  (десктоп) -->
+                <div class="hidden md:flex items-center space-x-6 text-lg font-medium">
+                    {% if user.is_authenticated %}
+                        <span class="text-white">Привет, {{ user.email|default:user.get_username }}</span>
+                        <a href="{% url 'account_logout' %}" class="text-white hover:text-cyan-300 transition">Выйти</a>
+                    {% else %}
+                        <a href="{% url 'account_login' %}" class="text-white hover:text-cyan-300 transition">Войти</a>
+                        <a href="{% url 'account_signup' %}" class="text-white hover:text-cyan-300 transition bg-cyan-600 px-4 py-2 rounded-lg hover:bg-cyan-500">Регистрация</a>
+                    {% endif %}
+                </div>
 
                 <!-- Бургер -->
                 <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
@@ -70,6 +79,17 @@
             <!-- Мобильное меню (сайдбар) -->
             <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-cyan-800 z-50 pt-20 px-6 -translate-x-full transition-transform duration-300 overflow-y-auto">
            	{% main_menu max_levels=2 template="menus/main/mobile.html" %}
+
+               <!-- Пользовательская зона аудентификация (мобильное меню, внизу) -->
+            <div class="mt-12 pt-8 border-t border-cyan-600">
+                {% if user.is_authenticated %}
+                    <div class="text-white mb-4 text-lg">Привет, {{ user.email|default:user.get_username }}</div>
+                    <a href="{% url 'account_logout' %}" class="text-white hover:text-cyan-300 block py-2">Выйти</a>
+                {% else %}
+                    <a href="{% url 'account_login' %}" class="text-white hover:text-cyan-300 block py-3 text-lg">Войти</a>
+                    <a href="{% url 'account_signup' %}" class="block mt-4 bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-3 rounded-lg text-center text-lg">Регистрация</a>
+                {% endif %}
+            </div>
 	    </div>
         </div>
     </header>
