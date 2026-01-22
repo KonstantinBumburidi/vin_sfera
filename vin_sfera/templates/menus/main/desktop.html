@@ -10,7 +10,7 @@
 
             {% if item.has_children_in_menu %}
                 <ul class="absolute left-0 top-full mt-2 hidden group-hover:block bg-cyan-700 rounded-lg shadow-lg py-2 min-w-48">
-                    {% sub_menu item max_levels=2 template="menus/main/sub_menu.html" %}
+                    {% sub_menu item template="menus/main/sub_menu.html" %}
                 </ul>
             {% endif %}
         </li>
