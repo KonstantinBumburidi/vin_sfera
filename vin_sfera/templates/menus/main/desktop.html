@@ -1,15 +1,23 @@
 {% load menu_tags %}
-
 <ul class="flex items-center space-x-8 text-lg font-medium">
     {% for item in menu_items %}
         <li class="{% if item.has_children_in_menu %}relative group{% endif %}">
             <a href="{{ item.href }}"
-               class="text-white hover:text-cyan-300 transition {% if item.is_active %}font-bold underline{% endif %}">
+               class="flex items-center text-white hover:text-cyan-300 transition {% if item.is_active %}font-bold underline{% endif %}">
                 {{ item.text }}
+                {% if item.has_children_in_menu %}
+                    <!-- Стрелочка вниз для визуального намёка -->
+                    <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                {% endif %}
             </a>
 
             {% if item.has_children_in_menu %}
-                <ul class="absolute left-0 top-full mt-2 hidden group-hover:block bg-cyan-700 rounded-lg shadow-lg py-2 min-w-48">
+                <ul class="absolute left-0 top-full mt-0 w-48 bg-cyan-700 rounded-lg shadow-lg py-2
+                           opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                           pointer-events-none group-hover:pointer-events-auto
+                           transition-all duration-300 ease-in-out">
                     {% sub_menu item template="menus/main/sub_menu.html" %}
                 </ul>
             {% endif %}

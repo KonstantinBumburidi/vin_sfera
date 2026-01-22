@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     "audio",
     "search",
     "base",
+    "feed",
 ]
 
 MIDDLEWARE = [
