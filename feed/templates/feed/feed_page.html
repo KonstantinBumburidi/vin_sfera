@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="max-w-4xl mx-auto">
-        <!-- Вступительный текст (опционально) -->
+        <!-- Вступительный текст -->
         {% if page.intro %}
             <div class="prose prose-lg mb-12 text-gray-700">
                 {{ page.intro|richtext }}
@@ -12,75 +12,47 @@
 
         <h1 class="text-3xl font-bold text-cyan-700 mb-8">Внутренние новости</h1>
 
-        <!-- Если пользователь не авторизован -->
+        <!-- Если не авторизован -->
         {% if not user.is_authenticated %}
             <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-                <p class="text-lg text-yellow-800">Для просмотра ленты необходимо войти в аккаунт.</p>
-            </div>
-        {% endif %}
-
-        <!-- Лента постов -->
-        {% if posts %}
-            <div class="space-y-8">
-                {% for post in posts %}
-                    <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
-                        <div class="p-6">
-                            <!-- Автор и дата -->
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="bg-gray-200 border-2 border-dashed rounded-full w-12 h-12"></div> <!-- аватарка потом -->
-                                <div>
-                                    <p class="font-semibold text-lg">{{ post.author.get_full_name|default:post.author.username }}</p>
-                                    <p class="text-sm text-gray-500">{{ post.created_at|date:"d.m.Y H:i" }}
-                                        {% if post.pinned %}<span class="ml-2 text-cyan-600 font-medium">Закреплённый</span>{% endif %}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Текст поста -->
-                            <div class="prose prose-lg mb-6">
-                                {{ post.content|linebreaks }}
-                            </div>
-
-                            <!-- Галерея изображений -->
-                            {% if post.images.exists %}
-                                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                                    {% for img in post.images.all %}
-                                        {% image img.image fill-400x300 as photo %}
-                                        <img src="{{ photo.url }}" alt="" class="rounded-lg object-cover w-full h-48">
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-
-                            <!-- Документы -->
-                            {% if post.documents.exists %}
-                                <div class="mb-6">
-                                    <p class="font-medium text-gray-700 mb-2">Прикреплённые документы:</p>
-                                    <ul class="space-y-2">
-                                        {% for doc in post.documents.all %}
-                                            <li>
-                                                <a href="{{ doc.document.url }}" target="_blank" class="text-cyan-600 hover:underline">
-                                                    📄 {{ doc.document.title }}
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
-
-                            <!-- Счётчики (пока только просмотры) -->
-                            <div class="flex items-center space-x-6 text-sm text-gray-500">
-                                <span>👁 {{ post.views_count }} просмотров</span>
-                                <span>❤️ {{ post.likes_count }}</span>
-                                <span>💬 {{ post.comments_count }}</span>
-                            </div>
-                        </div>
-                    </article>
-                {% endfor %}
+                <p class="text-lg text-yellow-800">Войдите, чтобы видеть ленту и создавать посты.</p>
             </div>
         {% else %}
-            {% if user.is_authenticated %}
-                <p class="text-center text-gray-600 text-lg">Пока нет постов в ленте.</p>
-            {% endif %}
+            <!-- Кнопка «Новый пост» (плавающая) -->
+            <button
+                hx-get="{% url 'feed:post_create' %}"
+                hx-target="#modal-body"
+                hx-on-htmx-after-request="
+                    document.getElementById('post-modal').classList.remove('hidden');
+                    document.getElementById('modal-title').textContent = 'Новый пост';
+                "
+                class="fixed bottom-8 right-8 bg-cyan-700 text-white rounded-full w-16 h-16 shadow-2xl hover:bg-cyan-600 flex items-center justify-center text-4xl z-40">
+                +
+            </button>
+
+            <!-- Контейнер для списка постов (htmx будет заменять его содержимое) -->
+            <div id="posts-container">
+                {% include "feed/posts_list.html" %}
+            </div>
         {% endif %}
+
+        <!-- Универсальная модалка -->
+        <div id="post-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center px-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
+                <!-- Кнопка закрытия -->
+                <button
+                    type="button"
+                    hx-on-click="this.closest('#post-modal').classList.add('hidden')"
+                    class="absolute top-6 right-6 text-3xl text-gray-500 hover:text-gray-700">
+                    ×
+                </button>
+
+                <!-- Заголовок модалки -->
+                <div id="modal-title" class="text-3xl font-bold text-cyan-700 px-10 pt-10 pb-6"></div>
+
+                <!-- Тело модалки (сюда htmx загрузит форму) -->
+                <div id="modal-body" class="px-10 pb-10"></div>
+            </div>
+        </div>
     </div>
 {% endblock %}

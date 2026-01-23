@@ -1,0 +1,76 @@
+{% load wagtailimages_tags wagtailcore_tags %}
+
+<div class="space-y-8">
+    {% for post in posts %}
+        <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+            <div class="p-6">
+                <!-- Автор и дата -->
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="bg-gray-200 border-2 border-dashed rounded-full w-12 h-12"></div>
+                    <div>
+                        <p class="font-semibold text-lg">{{ post.author.get_full_name|default:post.author.username }}</p>
+                        <p class="text-sm text-gray-500">{{ post.created_at|date:"d.m.Y H:i" }}
+                            {% if post.pinned %}<span class="ml-2 bg-cyan-100 text-cyan-800 px-2 py-1 rounded text-xs font-medium">Закреплён</span>{% endif %}
+                        </p>
+                    </div>
+                    {% if post.author == request.user or request.user.is_staff %}
+                        <div class="ml-auto flex space-x-3">
+                            <button
+                                hx-get="{% url 'feed:post_update' post.pk %}"
+                                hx-target="#modal-body"
+                                hx-on-htmx-after-request="
+                                    document.getElementById('post-modal').classList.remove('hidden');
+                                    document.getElementById('modal-title').textContent = 'Редактировать пост';
+                                "
+                                class="text-cyan-600 hover:text-cyan-800">
+                                Редактировать
+                            </button>
+                            <button
+                                hx-post="{% url 'feed:post_delete' post.pk %}"
+                                hx-target="#posts-container"
+                                hx-swap="innerHTML"
+                                hx-confirm="Удалить пост навсегда?"
+                                class="text-red-600 hover:text-red-800">
+                                Удалить
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Текст -->
+                <div class="prose prose-lg mb-6">{{ post.content|linebreaks }}</div>
+
+                <!-- Изображения -->
+                {% if post.images.exists %}
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                        {% for img_link in post.images.all %}
+                            {% image img_link.image fill-400x300 as photo %}
+                            <img src="{{ photo.url }}" alt="" class="rounded-lg object-cover w-full h-48">
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Документы -->
+                {% if post.documents.exists %}
+                    <div class="mb-6">
+                        <p class="font-medium text-gray-700 mb-2">Документы:</p>
+                        <ul class="space-y-2">
+                            {% for doc_link in post.documents.all %}
+                                <li><a href="{{ doc_link.document.url }}" target="_blank" class="text-cyan-600 hover:underline">📄 {{ doc_link.document.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <!-- Счётчики -->
+                <div class="flex items-center space-x-6 text-sm text-gray-500">
+                    <span>👁 {{ post.views_count }}</span>
+                    <span>❤️ {{ post.likes_count }}</span>
+                    <span>💬 {{ post.comments_count }}</span>
+                </div>
+            </div>
+        </article>
+    {% empty %}
+        <p class="text-center text-gray-600 text-lg">Пока нет постов.</p>
+    {% endfor %}
+</div>

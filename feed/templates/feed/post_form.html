@@ -1,0 +1,96 @@
+{% load wagtailimages_tags %}
+
+<form method="post" enctype="multipart/form-data"
+      hx-post="{% if post %}{% url 'feed:post_update' post.pk %}{% else %}{% url 'feed:post_create' %}{% endif %}"
+      hx-target="#posts-container"
+      hx-swap="innerHTML"
+      hx-on-htmx-after-request="
+          if(event.detail.successful) {
+              document.getElementById('post-modal').classList.add('hidden');
+          }
+      ">
+    {% csrf_token %}
+    <div class="space-y-6">
+        <div>
+            <label class="block font-medium mb-2">Текст поста</label>
+            {{ form.content }}
+        </div>
+
+        <div>
+            <label class="block font-medium mb-2">Видимость (группы)</label>
+            {{ form.visibility_groups }}
+        </div>
+
+        {% if form.pinned %}
+            <div class="flex items-center">
+                {{ form.pinned }}
+                <label class="ml-2">Закреплённый пост</label>
+            </div>
+        {% endif %}
+
+        <!-- Текущие изображения (только при редактировании) -->
+        {% if post and post.images.exists %}
+            <div>
+                <p class="font-medium mb-3">Текущие изображения:</p>
+                <div class="grid grid-cols-3 gap-4">
+                    {% for img_link in post.images.all %}
+                        <div class="relative group">
+                            {% image img_link.image fill-200x200 as ph %}
+                            <img src="{{ ph.url }}" class="rounded-lg">
+                            <button hx-post="{% url 'feed:image_delete' img_link.pk %}"
+                                    hx-target="closest div" hx-swap="outerHTML"
+                                    hx-confirm="Удалить изображение?"
+                                    class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-8 h-8 opacity-0 group-hover:opacity-100 transition">
+                                ×
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Новые изображения -->
+        <div>
+            <label class="block font-medium mb-2">Добавить изображения</label>
+            <input type="file" name="images" multiple accept="image/*" class="w-full border rounded-lg p-2">
+        </div>
+
+        <!-- Аналогично для документов -->
+        {% if post and post.documents.exists %}
+            <div>
+                <p class="font-medium mb-3">Текущие документы:</p>
+                <ul class="space-y-2">
+                    {% for doc_link in post.documents.all %}
+                        <li class="flex justify-between items-center">
+                            <a href="{{ doc_link.document.url }}" target="_blank" class="text-cyan-600 hover:underline">
+                                📄 {{ doc_link.document.title }}
+                            </a>
+                            <button hx-post="{% url 'feed:document_delete' doc_link.pk %}"
+                                    hx-target="closest li" hx-swap="outerHTML"
+                                    hx-confirm="Удалить документ?"
+                                    class="text-red-600 text-sm">
+                                Удалить
+                            </button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div>
+            <label class="block font-medium mb-2">Добавить документы</label>
+            <input type="file" name="documents" multiple class="w-full border rounded-lg p-2">
+        </div>
+
+        <div class="flex justify-end space-x-4 pt-6">
+            <button type="submit" class="bg-cyan-700 text-white px-8 py-3 rounded-lg hover:bg-cyan-600">
+                {{ title|default:"Сохранить" }}
+            </button>
+            <button type="button"
+                hx-on-click="this.closest('#post-modal').classList.add('hidden')"
+                class="text-gray-600 px-6 py-3">
+                Отмена
+            </button>
+        </div>
+    </div>
+</form>

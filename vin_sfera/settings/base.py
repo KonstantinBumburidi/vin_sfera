@@ -112,7 +112,6 @@ LOGIN_REDIRECT_URL = '/'                   # куда после логина
 LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_SIGNUP_REDIRECT_URL = '/'
 
-
 ROOT_URLCONF = "vin_sfera.urls"
 
 TEMPLATES = [
