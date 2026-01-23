@@ -16,10 +16,12 @@
             {{ form.content }}
         </div>
 
+        {% comment %}
         <div>
             <label class="block font-medium mb-2">Видимость (группы)</label>
             {{ form.visibility_groups }}
         </div>
+        {% endcomment %}
 
         {% if form.pinned %}
             <div class="flex items-center">

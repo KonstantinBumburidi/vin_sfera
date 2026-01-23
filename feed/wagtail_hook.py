@@ -26,10 +26,7 @@ class PostViewSet(ModelViewSet):
                 FieldPanel("author"),
                 FieldPanel("content"),
                 FieldPanel("pinned"),
-                FieldPanel(
-                    "visibility_groups",
-                    widget=CheckboxSelectMultiple,
-                ),
+                # FieldPanel("visibility_groups", widget=CheckboxSelectMultiple),
             ],
             heading="Основное",
         ),

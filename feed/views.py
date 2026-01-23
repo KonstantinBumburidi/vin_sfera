@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
+from django.contrib.auth.models import Group
 from wagtail.images import get_image_model
 from wagtail.documents import get_document_model
 
@@ -34,26 +35,32 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         self.object = form.save()
 
-        # Новые изображения
+        # Автоматически устанавливаем видимость только для "Группа Сфера"
+        try:
+            sphera_group = Group.objects.get(name="Группа Сфера")
+            self.object.visibility_groups.set([sphera_group])  # очищаем старые (если были) и ставим эту
+        except Group.DoesNotExist:
+            # Если группы вдруг нет — пост видим всем (на всякий случай)
+            self.object.visibility_groups.clear()
+
+        # Остальной код с файлами (изображения/документы) без изменений
         for f in self.request.FILES.getlist('images'):
             img = Image(title=f.name, file=f)
             img.save()
             PostImage.objects.create(post=self.object, image=img)
 
-        # Новые документы
         for f in self.request.FILES.getlist('documents'):
             doc = Document(title=f.name, file=f)
             doc.save()
             PostDocument.objects.create(post=self.object, document=doc)
 
-        messages.success(self.request, 'Пост создан!')
+        messages.success(self.request, 'Пост сохранён!')
 
         if self.request.headers.get('HX-Request'):
-            # Обновляем только список постов
             visible_posts = self.get_visible_posts()
             return render(self.request, 'feed/posts_list.html', {'posts': visible_posts})
 
-        return redirect('feed_page')  # замени на реверс или page.get_url() если нужно
+        return redirect(self.request.path)  # возвращаемся на ту же страницу ленты
 
     def get_visible_posts(self):
         posts = Post.objects.all().order_by('-pinned', '-created_at')
@@ -83,9 +90,18 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
     def form_valid(self, form):
+        form.instance.author = self.request.user
         self.object = form.save()
 
-        # Добавляем новые файлы (аналогично create)
+        # Автоматически устанавливаем видимость только для "Группа Сфера"
+        try:
+            sphera_group = Group.objects.get(name="Группа Сфера")
+            self.object.visibility_groups.set([sphera_group])  # очищаем старые (если были) и ставим эту
+        except Group.DoesNotExist:
+            # Если группы вдруг нет — пост видим всем (на всякий случай)
+            self.object.visibility_groups.clear()
+
+        # Остальной код с файлами (изображения/документы) без изменений
         for f in self.request.FILES.getlist('images'):
             img = Image(title=f.name, file=f)
             img.save()
@@ -96,13 +112,13 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
             doc.save()
             PostDocument.objects.create(post=self.object, document=doc)
 
-        messages.success(self.request, 'Пост обновлён!')
+        messages.success(self.request, 'Пост сохранён!')
 
         if self.request.headers.get('HX-Request'):
             visible_posts = self.get_visible_posts()
             return render(self.request, 'feed/posts_list.html', {'posts': visible_posts})
 
-        return redirect('feed_page')
+        return redirect(self.request.path)  # возвращаемся на ту же страницу ленты
 
     def get_visible_posts(self):
         # Тот же метод, что в create
