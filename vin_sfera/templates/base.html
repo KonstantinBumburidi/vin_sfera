@@ -111,33 +111,60 @@
 
     <!-- Футер -->
     <footer class="bg-gray-800 text-white py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="flex justify-center space-x-10 mb-8">
-		{% with settings=settings.base.NavigationSettings %}    
-                {% if settings.vk_url and settings.vk_icon %}
-                    <a href="{{ settings.vk_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition">
-                        {% image settings.vk_icon width-48 as vk_img %}
-                        <img src="{{ vk_img.url }}" alt="VK" class="w-12 h-12">
-                    </a>
-                {% endif %}
+       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
 
-                {% if settings.facebook_url and settings.facebook_icon %}
-                    <a href="{{ settings.facebook_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition">
-                        {% image settings.facebook_icon width-48 as fb_img %}
-                        <img src="{{ fb_img.url }}" alt="Facebook" class="w-12 h-12">
+            <!-- Левая часть: Контакты -->
+            <div class="text-left">
+                <h4 class="text-xl font-semibold mb-4">Контакты:</h4>
+                <p class="text-lg leading-relaxed">
+                    г. Алматы ул. Сатпаева 90/4<br>
+                    Белла Владимировна Бумбуриди<br>
+                    <a href="tel:+77776869975" class="hover:underline transition">
+                        +7 777-686-9975
                     </a>
-                {% endif %}
+                </p>
+            </div>
 
-                {% if settings.instagram_url and settings.instagram_icon %}
-                    <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition">
-                        {% image settings.instagram_icon width-48 as ig_img %}
-                        <img src="{{ ig_img.url }}" alt="Instagram" class="w-12 h-12">
-                    </a>
-                {% endif %}
-            	{% endwith %}
-	    </div>
-            <p class="text-lg">&copy; 2025 Сфера Сознания. Все права защищены.</p>
+            <!-- Центральная часть: Социальные сети -->
+            <div class="flex justify-center items-start">
+                <div>
+                    {% with settings=settings.base.NavigationSettings %}
+                        <div class="flex justify-center space-x-10">
+                            {% if settings.vk_url and settings.vk_icon %}
+                                <a href="{{ settings.vk_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition">
+                                    {% image settings.vk_icon width-48 as vk_img %}
+                                    <img src="{{ vk_img.url }}" alt="VK" class="w-12 h-12">
+                                </a>
+                            {% endif %}
+
+                            {% if settings.facebook_url and settings.facebook_icon %}
+                                <a href="{{ settings.facebook_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition">
+                                    {% image settings.facebook_icon width-48 as fb_img %}
+                                    <img src="{{ fb_img.url }}" alt="Facebook" class="w-12 h-12">
+                                </a>
+                            {% endif %}
+
+                            {% if settings.instagram_url and settings.instagram_icon %}
+                                <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition">
+                                    {% image settings.instagram_icon width-48 as ig_img %}
+                                    <img src="{{ ig_img.url }}" alt="Instagram" class="w-12 h-12">
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endwith %}
+                </div>
+            </div>
+
+            <!-- Правая часть: Копирайт -->
+            <div class="text-right md:text-right text-center">
+                <p class="text-lg">
+                    &copy; 2025 Сфера Сознания.<br>
+                    Все права защищены.
+                </p>
+            </div>
         </div>
+    </div>
     </footer>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </body>
