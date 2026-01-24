@@ -96,10 +96,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Регистрация с подтверждением email
-ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"   # ("mandatory" ) обязательно подтверждение
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 # ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False             # дополнительно отключаем любые попытки подтверждения
