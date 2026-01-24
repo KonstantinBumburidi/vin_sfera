@@ -37,7 +37,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
         # Автоматически устанавливаем видимость только для "Группа Сфера"
         try:
-            sphera_group = Group.objects.get(name="Группа Сфера")
+            sphera_group = Group.objects.get(name="COSMO")
             self.object.visibility_groups.set([sphera_group])  # очищаем старые (если были) и ставим эту
         except Group.DoesNotExist:
             # Если группы вдруг нет — пост видим всем (на всякий случай)
