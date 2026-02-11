@@ -68,6 +68,7 @@ INSTALLED_APPS = [
 
     "blog",
     "channels",
+    "spblock",
     "home",
     "videos",
     "audio",
