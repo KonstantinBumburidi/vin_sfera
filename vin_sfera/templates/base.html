@@ -11,7 +11,9 @@
     <meta name="description" content="{% block meta_description %}Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы{% endblock %}">
     <title>{% block title %}Сфера Сознания{% endblock %} | Центр космоэнергетики и кинезиологии</title>
     {% load wagtailmetadata_tags %}
-    {% meta_tags %}
+    {% if page %}
+        {% meta_tags page %}
+    {% endif %}
     {% if page %}
         <link rel="canonical" href="{{ page.full_url }}">
     {% else %}
@@ -54,7 +56,23 @@
                 <a href="/" class="flex items-center">
                     <img src="{% static '/home/images/logo.jpg' %}" alt="Логотип Сфера Сознания" class="w-14 h-14 object-cover rounded-full ring-4 ring-cyan-500/30">
                 </a>
-
+                <!-- Форма поиска (десктоп) -->
+                <div class="flex-1 max-w-md mx-8 hidden md:block">
+                    <form action="{% url 'search' %}" method="get" class="relative">
+                        <input
+                            type="text"
+                            name="query"
+                            placeholder="Поиск по сайту..."
+                            class="w-full pl-12 pr-6 py-3 rounded-full bg-white/90 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 shadow-md transition"
+                            {% if request.GET.query %}value="{{ request.GET.query }}"{% endif %}
+                        >
+                        <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-700">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
                
                <!-- Десктоп меню — добавляем обёртку с responsive-классами -->
                 <nav class="hidden md:flex items-center space-x-8 text-lg font-medium">
@@ -68,7 +86,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                     <svg class="h-8 w-8 close-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>

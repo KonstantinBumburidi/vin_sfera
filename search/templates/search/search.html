@@ -1,38 +1,206 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
 
-{% block body_class %}template-searchresults{% endblock %}
+{% block title %}Поиск{% endblock %}
 
-{% block title %}Search{% endblock %}
+{% block meta_description %}Поиск по сайту Сфера Сознания — космоэнергетика, кинезиология, биорезонанс{% endblock %}
 
 {% block content %}
-<h1>Search</h1>
-
-<form action="{% url 'search' %}" method="get">
-    <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-    <input type="submit" value="Search" class="button">
-</form>
-
-{% if search_results %}
-<ul>
-    {% for result in search_results %}
-    <li>
-        <h4><a href="{% pageurl result %}">{{ result }}</a></h4>
-        {% if result.search_description %}
-        {{ result.search_description }}
+<div class="max-w-4xl mx-auto">
+    <!-- Заголовок -->
+    <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+        {% if search_query %}
+            Результаты поиска: «{{ search_query }}»
+        {% else %}
+            Поиск по сайту
         {% endif %}
-    </li>
-    {% endfor %}
-</ul>
+    </h1>
 
-{% if search_results.has_previous %}
-<a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
-{% endif %}
+    <!-- Форма поиска -->
+    <form action="{% url 'search' %}" method="get" class="mb-10">
+        <div class="flex gap-4">
+            <div class="relative flex-1">
+                <input
+                    type="text"
+                    name="query"
+                    placeholder="Введите запрос..."
+                    value="{{ search_query|default:'' }}"
+                    class="w-full px-5 py-3 pr-12 rounded-xl border-2 border-gray-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 outline-none transition-all text-lg"
+                    autofocus
+                >
+                <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-cyan-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </button>
+            </div>
+            <button
+                type="submit"
+                class="px-6 py-3 bg-cyan-600 text-white font-medium rounded-xl hover:bg-cyan-700 transition-colors shadow-md hover:shadow-lg"
+            >
+                Найти
+            </button>
+        </div>
+    </form>
 
-{% if search_results.has_next %}
-<a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
-{% endif %}
-{% elif search_query %}
-No results found
-{% endif %}
+    <!-- Результаты поиска -->
+    {% if search_results %}
+        <div class="mb-6 text-gray-600">
+            Найдено результатов: {{ search_results.paginator.count }}
+        </div>
+
+        <div class="space-y-6">
+            {% for result in search_results %}
+                {% with result_type=result.content_type.model %}
+                <article class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden">
+                    <a href="{% pageurl result %}" class="block md:flex">
+                        <!-- Изображение -->
+                        <div class="md:w-48 h-48 md:h-auto flex-shrink-0 bg-gray-100">
+                            {% if result.specific.main_image %}
+                                {% image result.specific.main_image fill-300x200 as img %}
+                                <img src="{{ img.url }}" alt="{{ result.title }}" class="w-full h-full object-cover">
+                            {% elif result_type == 'videopage' %}
+                                <div class="w-full h-full flex items-center justify-center bg-cyan-100">
+                                    <svg class="w-16 h-16 text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            {% elif result_type == 'audiopage' %}
+                                <div class="w-full h-full flex items-center justify-center bg-purple-100">
+                                    <svg class="w-16 h-16 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                                    </svg>
+                                </div>
+                            {% else %}
+                                <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                                    <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Контент -->
+                        <div class="flex-1 p-5">
+                            <!-- Тип контента -->
+                            <div class="mb-2">
+                                {% if result_type == 'blogpage' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        📄 Статья
+                                    </span>
+                                {% elif result_type == 'videopage' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-cyan-100 text-cyan-800">
+                                        🎬 Видео
+                                    </span>
+                                {% elif result_type == 'audiopage' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                        🎧 Аудио
+                                    </span>
+                                {% elif result_type == 'channelsectionpage' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                        ⚡ Частоты
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        📄 Страница
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Заголовок -->
+                            <h2 class="text-xl font-semibold text-gray-800 hover:text-cyan-600 transition-colors mb-2">
+                                {{ result.title }}
+                            </h2>
+
+                            <!-- Описание -->
+                            {% if result.search_description %}
+                                <p class="text-gray-600 line-clamp-2">{{ result.search_description }}</p>
+                            {% elif result.specific.intro %}
+                                <p class="text-gray-600 line-clamp-2">{{ result.specific.intro|truncatewords:30 }}</p>
+                            {% endif %}
+
+                            <!-- Дата (если есть) -->
+                            {% if result.specific.date %}
+                                <p class="text-sm text-gray-400 mt-3">
+                                    📅 {{ result.specific.date|date:"d M Y" }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </a>
+                </article>
+                {% endwith %}
+            {% endfor %}
+        </div>
+
+        <!-- Пагинация -->
+        {% if search_results.has_other_pages %}
+        <nav class="mt-10 flex justify-center items-center gap-2">
+            {% if search_results.has_previous %}
+                <a
+                    href="{% url 'search' %}?query={{ search_query|urlencode }}&page={{ search_results.previous_page_number }}"
+                    class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-cyan-300 transition-colors"
+                >
+                    ← Назад
+                </a>
+            {% else %}
+                <span class="px-4 py-2 rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed">
+                    ← Назад
+                </span>
+            {% endif %}
+
+            <!-- Номера страниц -->
+            <div class="flex gap-1">
+                {% for num in search_results.paginator.page_range %}
+                    {% if search_results.number == num %}
+                        <span class="px-4 py-2 rounded-lg bg-cyan-600 text-white font-medium">
+                            {{ num }}
+                        </span>
+                    {% elif num > search_results.number|add:'-3' and num < search_results.number|add:'3' %}
+                        <a
+                            href="{% url 'search' %}?query={{ search_query|urlencode }}&page={{ num }}"
+                            class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-cyan-300 transition-colors"
+                        >
+                            {{ num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if search_results.has_next %}
+                <a
+                    href="{% url 'search' %}?query={{ search_query|urlencode }}&page={{ search_results.next_page_number }}"
+                    class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-cyan-300 transition-colors"
+                >
+                    Далее →
+                </a>
+            {% else %}
+                <span class="px-4 py-2 rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed">
+                    Далее →
+                </span>
+            {% endif %}
+        </nav>
+        {% endif %}
+
+    {% elif search_query %}
+        <!-- Нет результатов -->
+        <div class="text-center py-12">
+            <div class="text-6xl mb-4">🔍</div>
+            <h2 class="text-xl font-semibold text-gray-700 mb-2">Ничего не найдено</h2>
+            <p class="text-gray-500 mb-6">
+                По запросу «{{ search_query }}» результатов не найдено.
+            </p>
+            <p class="text-gray-400 text-sm">
+                Попробуйте изменить запрос или использовать другие ключевые слова.
+            </p>
+        </div>
+    {% else %}
+        <!-- Начальное состояние -->
+        <div class="text-center py-12">
+            <div class="text-6xl mb-4">🔎</div>
+            <p class="text-gray-500">
+                Введите запрос в поле поиска выше
+            </p>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}
