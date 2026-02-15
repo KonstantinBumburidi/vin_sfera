@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth import get_user_model
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
@@ -7,6 +7,7 @@ from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.snippets.models import register_snippet
 from wagtail.fields import RichTextField
 
+User = get_user_model()
 
 # === НОВАЯ МОДЕЛЬ: типы каналов (справочник) ===
 @register_snippet
@@ -103,3 +104,33 @@ class FChannel(models.Model):
         ordering = ['sort_order']
         verbose_name = "Канал / Частота"
         verbose_name_plural = "Каналы / Частоты"
+
+class UserSavedChannel(models.Model):
+    """
+    Сохранённые (избранные) каналы пользователя.
+    Позволяет пользователю создавать свой список каналов для быстрого доступа.
+    """
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='saved_channels',
+        verbose_name="Пользователь"
+    )
+    channel = models.ForeignKey(
+        'channels.FChannel',
+        on_delete=models.CASCADE,
+        related_name='saved_by_users',
+        verbose_name="Канал"
+    )
+    notes = models.TextField(blank=True, verbose_name="Заметки пользователя")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Добавлено")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлено")
+
+    class Meta:
+        verbose_name = "Сохранённый канал"
+        verbose_name_plural = "Сохранённые каналы"
+        ordering = ['-created_at']
+        unique_together = ['user', 'channel']  # Один канал - одна запись на пользователя
+
+    def __str__(self):
+        return f"{self.user} → {self.channel}"

@@ -52,6 +52,11 @@ class SectionPage(MetadataPageMixin, Page):
 
 class ChannelSectionPage(MetadataPageMixin, Page):
     intro = RichTextField(blank=True, verbose_name="Введение ")
+    body = StreamField([
+        ('section', TextImageBlock()),
+        ('text_only', TextOnlyBlock()),
+        ('width_button', WidthButtonBlock()),
+    ], use_json_field=True, blank=True, verbose_name="Контент раздела")
 
     section_type = models.PositiveSmallIntegerField(
         choices=ChannelGroup.SECTION_CHOICES,
@@ -61,6 +66,7 @@ class ChannelSectionPage(MetadataPageMixin, Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('intro'),
+        FieldPanel('body'),
         FieldPanel('section_type'),
     ]
 
