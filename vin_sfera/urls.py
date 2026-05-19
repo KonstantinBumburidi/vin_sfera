@@ -22,6 +22,7 @@ urlpatterns = [
     path('sitemap.xml', sitemap, name='wagtail_sitemap'),
     path('accounts/', include('allauth.urls')),  # регистрация, логин, логаут и т.д.
     path('feed/', include('feed.urls')),
+    path('channels/', include('channels.urls')),
     path("robots.txt", robots_txt),
     path('yandex_6da6814435e0cb91.html', TemplateView.as_view(
         template_name='yandex_6da6814435e0cb91.html',

@@ -1,0 +1,45 @@
+<!-- channels/my_channels.html (новый шаблон) -->
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold mb-8 text-center text-indigo-900">Мои каналы</h1>
+
+    {% if saved_channels %}
+        <div class="space-y-6">
+            {% for saved in saved_channels %}
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-900">{{ saved.channel.name }}</h3>
+                            <p class="text-sm text-gray-600 mt-1">Группа: {{ saved.channel.group.title }} | Тип: {{ saved.channel.chtype.name|default:"—" }}</p>
+                            <p class="text-gray-700 mt-2">{{ saved.channel.description|default:"—" }}</p>
+                        </div>
+                        <form method="post" action="{% url 'channels:toggle_save_channel' saved.channel.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition">
+                                Удалить
+                            </button>
+                        </form>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Заметки:</label>
+                        <form method="post" action="{% url 'channels:toggle_save_channel' saved.channel.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="update_notes" value="1">
+                            <textarea name="notes" class="w-full p-2 border rounded" rows="3">{{ saved.notes }}</textarea>
+                            <button type="submit" class="mt-2 bg-indigo-600 text-white py-1 px-3 rounded hover:bg-indigo-700 transition">
+                                Сохранить заметки
+                            </button>
+                        </form>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4">Добавлено: {{ saved.created_at|date:"d.m.Y H:i" }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-gray-600">У вас пока нет сохранённых каналов. Добавьте их на странице <a href="{% url 'channels:browse_channels' %}" class="text-indigo-600 hover:underline">обзора каналов</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}

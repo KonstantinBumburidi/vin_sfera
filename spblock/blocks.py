@@ -1,9 +1,8 @@
+from wagtail import blocks
 from wagtail.blocks import (
-    StructBlock, CharBlock, RichTextBlock, BooleanBlock
+    StructBlock, CharBlock, RichTextBlock, URLBlock, BooleanBlock, PageChooserBlock
 )
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.blocks import PageChooserBlock
-
 
 # -----------------------------------------------------------------------------------
 # структурные блоки
@@ -56,7 +55,24 @@ class TextOnlyBlock(StructBlock):
 # полноширинная кнопка
 class WidthButtonBlock(StructBlock):
     button_text = CharBlock(required=True, label="Текст кнопки")
-    link_page = PageChooserBlock(required=True, label="Ссылка на страницу")
+    link_page = PageChooserBlock(required=False, label="Ссылка на страницу")
+    link_type = blocks.ChoiceBlock(
+        choices=[
+            ('page', 'Ссылка на внутреннюю страницу Wagtail'),
+            ('url', 'Ссылка на внешний сайт / Django-view'),
+            # ('document', 'Ссылка на документ') — если нужно
+        ],
+        label="Тип ссылки",
+        default='url',
+        help_text="Выбери, куда будет вести кнопка",
+        required=True,
+    )
+
+    external_url = URLBlock(
+        label="URL (внешняя ссылка или Django-view)",
+        required=False,
+        help_text="Например: https://example.com",
+    )
 
     class Meta:
         template = "home/blocks/width_button.html"

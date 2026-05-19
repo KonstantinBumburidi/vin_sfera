@@ -1,0 +1,18 @@
+<!-- channels/_toggle_button.html (частичный шаблон для HTMX) -->
+{% if is_saved %}
+    <button
+        hx-post="{% url 'channels:toggle_save_channel' channel.id %}"
+        hx-target="#toggle-{{ channel.id }}"
+        hx-swap="outerHTML"
+        class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition">
+        Удалить из моих
+    </button>
+{% else %}
+    <button
+        hx-post="{% url 'channels:toggle_save_channel' channel.id %}"
+        hx-target="#toggle-{{ channel.id }}"
+        hx-swap="outerHTML"
+        class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600 transition">
+        Добавить в мои
+    </button>
+{% endif %}
