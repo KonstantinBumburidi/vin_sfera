@@ -52,33 +52,55 @@
     <header class="bg-cyan-700 shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between py-4">
-                <!-- Логотип -->
-                <a href="/" class="flex items-center">
-                    <img src="{% static '/home/images/logo.jpg' %}" alt="Логотип Сфера Сознания" class="w-14 h-14 object-cover rounded-full ring-4 ring-cyan-500/30">
-                </a>
-                <!-- Форма поиска (десктоп) -->
-                <div class="flex-1 max-w-md mx-8 hidden md:block">
-                    <form action="{% url 'search' %}" method="get" class="relative">
-                        <input
-                            type="text"
-                            name="query"
-                            placeholder="Поиск по сайту..."
-                            class="w-full pl-12 pr-6 py-3 rounded-full bg-white/90 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 shadow-md transition"
-                            {% if request.GET.query %}value="{{ request.GET.query }}"{% endif %}
-                        >
-                        <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-700">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
-                        </button>
-                    </form>
-                </div>
-               
-               <!-- Десктоп меню — добавляем обёртку с responsive-классами -->
-                <nav class="hidden md:flex items-center space-x-8 text-lg font-medium">
-                    {% main_menu template="menus/main/desktop.html" %}
-                </nav>
+                <!-- Логотип + десктоп меню (сгруппированы влево) -->
+                <div class="flex items-center gap-8">
+                    <a href="/" class="flex items-center">
+                        <img src="{% static '/home/images/logo.jpg' %}" alt="Логотип Сфера Сознания" class="w-14 h-14 object-cover rounded-full ring-4 ring-cyan-500/30">
+                    </a>
 
+                    <!-- Форма поиска (десктоп) -->
+                    <!--
+                    <div class="flex-1 max-w-md mx-8 hidden md:block">
+                        <form action="{% url 'search' %}" method="get" class="relative">
+                            <input
+                                type="text"
+                                name="query"
+                                placeholder="Поиск по сайту..."
+                                class="w-full pl-12 pr-6 py-3 rounded-full bg-white/90 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 shadow-md transition"
+                                {% if request.GET.query %}value="{{ request.GET.query }}"{% endif %}
+                            >
+                            <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-700">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                   -->
+
+                    <!-- Десктоп меню -->
+                    <nav class="hidden md:flex items-center space-x-8 text-lg font-medium">
+                        {% main_menu template="menus/main/desktop.html" %}
+                    </nav>
+                </div>
+
+                <!-- Правая часть: кабинет + бургер -->
+                <div class="flex items-center gap-4">
+                    {% if request.user.is_authenticated %}
+                        <a href="/cabinet/" class="hidden md:inline-flex items-center gap-1.5 text-white border border-white/40 hover:bg-white/15 transition rounded-full px-4 py-1.5 text-sm font-medium">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            Кабинет
+                        </a>
+                    {% else %}
+                        <a href="/accounts/login/" class="hidden md:inline-flex items-center gap-1.5 text-white border border-white/40 hover:bg-white/15 transition rounded-full px-4 py-1.5 text-sm font-medium">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            Войти
+                        </a>
+                    {% endif %}
 
                 <!-- Бургер -->
                 <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
@@ -89,6 +111,7 @@
                         `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
+                </div><!-- /правая часть -->
             </div>
 
             <!-- Мобильное меню (сайдбар) -->
@@ -191,5 +214,10 @@
     </div>
     </footer>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script>
+        document.body.addEventListener('htmx:configRequest', function(evt) {
+            evt.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        });
+    </script>
 </body>
 </html>

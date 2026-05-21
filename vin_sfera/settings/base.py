@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "search",
     "base",
     "feed",
+    "account",
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,6 @@
 <!-- channels/browse_chan.html (новый шаблон) -->
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags channel_tags %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 py-12">
@@ -49,7 +49,7 @@
                         {% if user.is_authenticated %}
                             <td class="px-6 py-4 text-sm">
                                 <div id="toggle-{{ channel.id }}">
-                                    {% include "channels/_toggle_button.html" with channel=channel is_saved=channel.id in saved_channels %}
+                                    {% include "channels/_toggle_button.html" with channel=channel is_saved=channel.id|is_in:saved_channels %}
                                 </div>
                             </td>
                         {% endif %}
@@ -65,8 +65,8 @@
 
     {% if user.is_authenticated %}
         <div class="mt-8 text-center">
-            <a href="{% url 'channels:my_channels' %}" class="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition inline-block">
-                Перейти к "Мои каналы"
+            <a href="{% url 'account:cabinet' %}?tab=frequencies" class="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition inline-block">
+                Перейти в личный кабинет
             </a>
         </div>
     {% endif %}
