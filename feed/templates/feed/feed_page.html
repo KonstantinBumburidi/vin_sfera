@@ -10,53 +10,27 @@
             </div>
         {% endif %}
 
-        <!-- Заголовок + username и выход (только для авторизованных) -->
-        {% if user.is_authenticated %}
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-3xl font-bold text-cyan-700">Новости COSMO</h1>
-                <div class="flex items-center space-x-6">
-                    <span class="text-lg font-medium text-gray-700">{{ user.username }}</span>
-                    <a href="{% url 'account_logout' %}" class="bg-cyan-700 text-white px-6 py-3 rounded-lg hover:bg-cyan-600 transition">
-                        Выйти
-                    </a>
-                </div>
-            </div>
+        <!-- Заголовок -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-cyan-700">Новости COSMO</h1>
+            {% if user.is_authenticated %}
+                <button
+                    hx-get="{% url 'feed:post_create' %}"
+                    hx-target="#modal-body"
+                    hx-on-htmx-after-request="
+                        document.getElementById('post-modal').classList.remove('hidden');
+                        document.getElementById('modal-title').textContent = 'Новый пост';
+                    "
+                    class="bg-cyan-700 text-white px-6 py-3 rounded-lg hover:bg-cyan-600 transition text-lg font-medium">
+                    + Новый пост
+                </button>
+            {% endif %}
+        </div>
 
-            <!-- Кнопка «Новый пост» (плавающая) -->
-            <button
-                hx-get="{% url 'feed:post_create' %}"
-                hx-target="#modal-body"
-                hx-on-htmx-after-request="
-                    document.getElementById('post-modal').classList.remove('hidden');
-                    document.getElementById('modal-title').textContent = 'Новый пост';
-                "
-                class="fixed bottom-8 right-8 bg-cyan-700 text-white rounded-full w-16 h-16 shadow-2xl hover:bg-cyan-600 flex items-center justify-center text-4xl z-40">
-                +
-            </button>
-
-            <!-- Контейнер для списка постов -->
-            <div id="posts-container">
-                {% include "feed/posts_list.html" %}
-            </div>
-        {% else %}
-            <!-- Заголовок для незалогиненных -->
-            <h1 class="text-3xl font-bold text-cyan-700 mb-8 text-center">Новости COSMO</h1>
-
-            <!-- Сообщение и кнопки входа/регистрации для незалогиненных -->
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-10 text-center mb-12">
-                <p class="text-2xl text-yellow-800 mb-8">
-                    Войдите, чтобы видеть внутреннюю ленту и создавать посты.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-6 justify-center">
-                    <a href="{% url 'account_login' %}" class="bg-cyan-700 text-white font-medium px-10 py-4 rounded-lg hover:bg-cyan-600 transition text-xl">
-                        Войти
-                    </a>
-                    <a href="{% url 'account_signup' %}" class="bg-cyan-600 text-white font-medium px-10 py-4 rounded-lg hover:bg-cyan-500 transition text-xl">
-                        Регистрация
-                    </a>
-                </div>
-            </div>
-        {% endif %}
+        <!-- Контейнер для списка постов -->
+        <div id="posts-container">
+            {% include "feed/posts_list.html" %}
+        </div>
 
         <!-- Универсальная модалка -->
         <div id="post-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center px-4">
