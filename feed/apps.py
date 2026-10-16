@@ -18,6 +18,8 @@ class FeedConfig(AppConfig):
 
         @receiver(post_save, sender=User)
         def create_user_profile(sender, instance, created, **kwargs):
+            if kwargs.get("raw"):
+                return  # loaddata: профиль придёт из фикстуры
             if created:
                 # Создаём профиль
                 Profile.objects.get_or_create(user=instance)  # get_or_create на всякий случай
@@ -31,6 +33,8 @@ class FeedConfig(AppConfig):
 
         @receiver(post_save, sender=User)
         def save_user_profile(sender, instance, **kwargs):
+            if kwargs.get("raw"):
+                return
             try:
                 instance.feed_profile.save()
             except AttributeError:

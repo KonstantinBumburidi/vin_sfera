@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "django.contrib.postgres",
 
     'allauth',
     'allauth.account',
@@ -152,22 +153,12 @@ WSGI_APPLICATION = "vin_sfera.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'vin_sfera_db',
-        'USER': 'root',
-        'PASSWORD': 'arkona999',
-        'HOST': '127.0.0.1',      # или IP сервера
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': (
-                "SET sql_mode='STRICT_TRANS_TABLES', innodb_strict_mode=1; "
-                "SET NAMES utf8mb4 COLLATE utf8mb4_0900_ai_ci"
-            ),
-            'charset': 'utf8mb4',
-            'collation': 'utf8mb4_0900_ai_ci',
-        },
-        # Важно для MySQL 8.0+
-        'AUTHENTICATION': 'mysql_native_password',
+        'USER': 'kostaky',
+        'PASSWORD': 'arko999',
+        'HOST': '127.0.0.1',
+        'PORT': '5433',
     }
 }
 
