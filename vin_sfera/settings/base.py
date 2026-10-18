@@ -14,8 +14,14 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 
+import environ
+
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = PROJECT_DIR.parent
+
+# Параметры, разные для локальной машины и сервера, берутся из файла .env (не хранится в git)
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / '.env')
 
 ALLOWED_HOSTS = ['77.246.247.35','al-sfera.kz','www.al-sfera.kz','127.0.0.1','localhost','api.ipify.org']
 
@@ -154,11 +160,11 @@ WSGI_APPLICATION = "vin_sfera.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'vin_sfera_db',
-        'USER': 'kostaky',
-        'PASSWORD': 'arko999',
-        'HOST': '127.0.0.1',
-        'PORT': '5433',
+        'NAME': env('DB_NAME', default='vin_sfera_db'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST', default='127.0.0.1'),
+        'PORT': env('DB_PORT', default='5432'),
     }
 }
 
