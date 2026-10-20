@@ -6,12 +6,12 @@ from wagtailmetadata.models import MetadataPageMixin
 SITE_NAME = "Сфера Сознания"
 DEFAULT_DESCRIPTION = "Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы"
 
-# Ветки, которые не попадают в sitemap (как раньше в generate_sitemap)
-SITEMAP_EXCLUDED_PREFIXES = ("/videos/", "/materials/audio/")
-
 
 class SeoPageMixin(MetadataPageMixin):
     """Мета-теги страницы + флажок «скрыть от поисковиков»."""
+
+    # True у типов страниц, которые всегда скрыты от поисковиков (видео, аудио)
+    always_noindex = False
 
     noindex = models.BooleanField(
         default=False,
@@ -31,8 +31,12 @@ class SeoPageMixin(MetadataPageMixin):
         # Убираем переносы строк из описания
         return " ".join((self.search_description or DEFAULT_DESCRIPTION).split())
 
+    @property
+    def robots_noindex(self):
+        return self.noindex or self.always_noindex
+
     def get_sitemap_urls(self, request=None):
-        if self.noindex or (self.url or "").startswith(SITEMAP_EXCLUDED_PREFIXES):
+        if self.robots_noindex:
             return []
         return super().get_sitemap_urls(request)
 

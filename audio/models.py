@@ -9,6 +9,8 @@ from base.seo import SeoPageMixin
 from blog.models import Category  # общие категории (в твоём файле blog_models.py)
 
 class AudioIndexPage(SeoPageMixin, Page):
+    always_noindex = True  # короткие страницы, не для поиска
+
     intro = RichTextField(blank=True, verbose_name="Введение")
 
     content_panels = Page.content_panels + [
@@ -41,6 +43,8 @@ class AudioIndexPage(SeoPageMixin, Page):
 
 
 class AudioPage(SeoPageMixin, Page):
+    always_noindex = True  # короткие страницы, не для поиска
+
     date = models.DateField(verbose_name="Дата публикации")
     duration = models.CharField(max_length=20, blank=True, verbose_name="Длительность (например, 15:34)")
     intro = RichTextField(blank=True, verbose_name="Описание урока")

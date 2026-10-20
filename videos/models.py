@@ -8,6 +8,8 @@ from blog.models import Category  # импортируем общую катег
 import datetime
 
 class VideoIndexPage(SeoPageMixin, Page):
+    always_noindex = True  # короткие страницы, не для поиска
+
     intro = RichTextField(blank=True, verbose_name="Введение")
 
     content_panels = Page.content_panels + [
@@ -41,6 +43,8 @@ class VideoIndexPage(SeoPageMixin, Page):
 
 
 class VideoPage(SeoPageMixin, Page):
+    always_noindex = True  # короткие страницы, не для поиска
+
     date = models.DateField(
         verbose_name="Дата публикации",
         default = datetime.date(2025, 12, 25)  # ← значение по умолчанию 25 декабря 2025
@@ -92,8 +96,8 @@ class VideoPage(SeoPageMixin, Page):
         # Считаем просмотр один раз за сессию
         session_key = f"viewed_video_{self.id}"
         if not request.session.get(session_key):
-            self.views += 1
-            self.save(update_fields=['views'])
+            # update() без save(): не трогает поисковый индекс и ревизии
+            VideoPage.objects.filter(pk=self.pk).update(views=models.F('views') + 1)
             request.session[session_key] = True
         return super().serve(request)
 

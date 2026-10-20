@@ -12,7 +12,7 @@
     {% if page.get_meta_title %}
         {# Страницы Wagtail: title, description, OG/Twitter из полей «Продвижение» #}
         {% meta_tags page %}
-        {% if page.noindex %}<meta name="robots" content="noindex, follow">{% endif %}
+        {% if page.robots_noindex %}<meta name="robots" content="noindex, follow">{% endif %}
         <link rel="canonical" href="{{ page.full_url }}">
     {% else %}
         {# Не-Wagtail views (поиск, кабинет, вход) #}
