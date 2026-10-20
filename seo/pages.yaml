@@ -1,0 +1,104 @@
+# SEO страниц al-sfera.kz — главный источник SEO-данных.
+# Правится на ноутбуке, отправляется через git, на сервере применяется:
+#   python3 manage.py apply_seo --dry-run   (показать, что изменится)
+#   python3 manage.py apply_seo             (записать и опубликовать)
+#
+# Ключ — адрес страницы. Поля:
+#   page:        название страницы, только для справки (не применяется)
+#   seo_title:   <title> и заголовок в поиске, до ~60 символов. Пусто — «Название | Сфера Сознания»
+#   description: описание в поиске, до ~160 символов
+#   image:       картинка для соцсетей — имя файла из «Изображений» (например posv95.jpg) или пусто
+#   noindex:     true — скрыть страницу от поисковиков
+# Поле, которого нет в записи, не меняется. Страницы, которых нет в файле, не трогаются.
+# Правки SEO в админке будут перезаписаны при следующем apply_seo.
+
+/:
+  page: Центр "Сфера Сознания"
+  seo_title: Школа Космоэнергетики Сфера сознания — Алматы
+  description: Школа Космоэнергетики «Сфера сознания» в Алматы — центр духовного развития. Обучение световым частотам, космоэнергетике, кинезиологии. Продление жизни, укрепление здоровья, позитивное мышление.
+  image: ''
+  noindex: false
+/kineziolog/:
+  page: Кинезиология
+  seo_title: кинезиология
+  description: kinesiolog
+  image: ''
+  noindex: false
+/biorezonans/:
+  page: Биорезонанс
+  seo_title: ''
+  description: ''
+  image: ''
+  noindex: false
+/svet_freq/:
+  page: Световые частоты
+  seo_title: Световые частоты и матрицы | Исцеление и защита | Сфера сознания Алматы
+  description: 'Световые частоты в космоэнергетике: посвящение в матрицы Творца, Света, Господа, Архангелов. Исцеление, защита, омоложение и духовный рост в центре «Сфера сознания» Алматы.'
+  image: ''
+  noindex: false
+/kosmoenergy/:
+  page: Космоэнергетика
+  seo_title: Космоэнергетика | Посвящение в каналы и исцеление | Сфера сознания Алматы
+  description: 'Космоэнергетика в центре «Сфера сознания» Алматы: посвящение в космические каналы Буддийского, Магического, Магистерского блоков и ХУТТА. Исцеление заболеваний, очищение от негатива, защита, омоложение и духовное развитие.'
+  image: ''
+  noindex: false
+/arhangel95/:
+  page: Блок энергий 95 Архангелов
+  seo_title: Архангелы 95
+  description: Архангелы
+  image: ''
+  noindex: false
+/about_/:
+  page: О нас
+  seo_title: о нас
+  description: ''
+  image: ''
+  noindex: false
+/materials/:
+  page: Материалы
+  seo_title: Материалы
+  description: Аудио, видео маиериалы и что-то важное
+  image: ''
+  noindex: false
+/materials/books/:
+  page: Книги
+  seo_title: ''
+  description: статьи, знания
+  image: ''
+  noindex: false
+/materials/blogs/:
+  page: Статьи
+  seo_title: ''
+  description: ''
+  image: ''
+  noindex: false
+/materials/blogs/slovo_delo/:
+  page: Слово и дело
+  seo_title: ''
+  description: ''
+  image: ''
+  noindex: false
+/materials/blogs/f/:
+  page: Аура
+  seo_title: ''
+  description: ''
+  image: ''
+  noindex: false
+/materials/blogs/blog_obshenie/:
+  page: Общение
+  seo_title: ''
+  description: ''
+  image: ''
+  noindex: false
+/materials/obolochka/:
+  page: СМЕЩЕНИЕ ПОЛЕВОЙ ОБОЛОЧКИ
+  seo_title: Смещение полей
+  description: Смещение и искажение полевой оболочки.
+  image: ''
+  noindex: false
+/novosty/:
+  page: Новости
+  seo_title: ''
+  description: ''
+  image: ''
+  noindex: false
