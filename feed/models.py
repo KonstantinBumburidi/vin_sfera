@@ -11,7 +11,7 @@ from wagtail.models import Page
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
 # from .models import Post  # уже есть импорт выше
-from wagtailmetadata.models import MetadataPageMixin
+from base.seo import SeoPageMixin
 
 User = get_user_model()
 
@@ -96,7 +96,7 @@ class PostDocument(models.Model):
 
 
 
-class FeedPage(MetadataPageMixin, Page):
+class FeedPage(SeoPageMixin, Page):
     intro = RichTextField(blank=True, verbose_name="Вступительный текст (над лентой)")
 
     content_panels = Page.content_panels + [

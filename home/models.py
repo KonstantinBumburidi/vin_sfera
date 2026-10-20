@@ -9,7 +9,7 @@ from channels.models import ChannelGroup
 from wagtail.blocks import StructBlock, CharBlock, PageChooserBlock
 from modelcluster.fields import ParentalKey
 from wagtail.documents.models import Document
-from wagtailmetadata.models import MetadataPageMixin
+from base.seo import SeoPageMixin
 from django.http import HttpResponse
 from django.template import loader
 
@@ -21,7 +21,7 @@ from spblock.blocks import (
 )
 
 #-----------------------------------------------------------------------------------
-class HomePage(MetadataPageMixin, Page):
+class HomePage(SeoPageMixin, Page):
     content_blocks = StreamField([
         ('hero', HeroBlock()),
         ('section', TextImageBlock()),
@@ -33,7 +33,7 @@ class HomePage(MetadataPageMixin, Page):
         FieldPanel('content_blocks'),   # новое поле
     ]
 
-class SectionPage(MetadataPageMixin, Page):
+class SectionPage(SeoPageMixin, Page):
     # Можно добавить свои поля, например описание, изображения и т.д.
     intro = RichTextField(blank=True, verbose_name="Краткое введение")
     body = StreamField([
@@ -50,7 +50,7 @@ class SectionPage(MetadataPageMixin, Page):
     # Ограничиваем, чтобы эти страницы были только дочерними главной
     parent_page_types = ['home.HomePage']
 
-class ChannelSectionPage(MetadataPageMixin, Page):
+class ChannelSectionPage(SeoPageMixin, Page):
     intro = RichTextField(blank=True, verbose_name="Введение ")
     body = StreamField([
         ('section', TextImageBlock()),
@@ -81,7 +81,7 @@ class ChannelSectionPage(MetadataPageMixin, Page):
         return context
 
 #-----------------------------------------------------------
-class BooksIndexPage(MetadataPageMixin, Page):
+class BooksIndexPage(SeoPageMixin, Page):
     intro = RichTextField(blank=True, verbose_name="Введение (текст сверху)")
 
     content_panels = Page.content_panels + [
@@ -123,7 +123,7 @@ class TableRow(Orderable):  # ← Orderable для сортировки в ад�
         return f"{self.number} — {self.name}"
 
 #-----------------------------------------------------------
-class ArchangelsPage(MetadataPageMixin, Page):  # ← если хочешь ArchangelsPage — просто переименуй
+class ArchangelsPage(SeoPageMixin, Page):  # ← если хочешь ArchangelsPage — просто переименуй
     intro = RichTextField(blank=True, verbose_name="Введение ")
 
     content_panels = Page.content_panels + [

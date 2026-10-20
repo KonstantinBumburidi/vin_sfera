@@ -3,11 +3,11 @@ from wagtail.models import Page
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
 from wagtail.images.models import Image
-from wagtailmetadata.models import MetadataPageMixin
+from base.seo import SeoPageMixin
 from blog.models import Category  # импортируем общую категорию
 import datetime
 
-class VideoIndexPage(MetadataPageMixin, Page):
+class VideoIndexPage(SeoPageMixin, Page):
     intro = RichTextField(blank=True, verbose_name="Введение")
 
     content_panels = Page.content_panels + [
@@ -40,7 +40,7 @@ class VideoIndexPage(MetadataPageMixin, Page):
         verbose_name = "Индекс видео"
 
 
-class VideoPage(MetadataPageMixin, Page):
+class VideoPage(SeoPageMixin, Page):
     date = models.DateField(
         verbose_name="Дата публикации",
         default = datetime.date(2025, 12, 25)  # ← значение по умолчанию 25 декабря 2025

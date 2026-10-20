@@ -1,23 +1,13 @@
 # robots.txt для al-sfera.kz
+# Одна группа для всех роботов: отдельные группы Yandex/Googlebot
+# отменяли бы для них правила ниже.
 
 User-agent: *
-Allow: /
 Disallow: /admin/
 Disallow: /django-admin/
 Disallow: /search/
 Disallow: /documents/download/
-
-# Разрешаем доступ к медиафайлам
-Allow: /media/
-Allow: /static/
-
-# Host: {{ host }}
+Disallow: /accounts/
+Disallow: /cabinet/
 
 Sitemap: {{ sitemap_url }}
-
-# Специфичные боты
-User-agent: Yandex
-Allow: /
-
-User-agent: Googlebot
-Allow: /

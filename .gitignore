@@ -34,5 +34,3 @@ dump*.json
 # OS
 .DS_Store
 Thumbs.db
-# Генерируется на каждом сервере командой generate_sitemap
-vin_sfera/templates/sitemap.xml

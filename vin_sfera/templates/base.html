@@ -8,16 +8,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{% block meta_description %}Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы{% endblock %}">
-    <title>{% block title %}Сфера Сознания{% endblock %} | Центр космоэнергетики и кинезиологии</title>
     {% load wagtailmetadata_tags %}
-    {% if page %}
+    {% if page.get_meta_title %}
+        {# Страницы Wagtail: title, description, OG/Twitter из полей «Продвижение» #}
         {% meta_tags page %}
-    {% endif %}
-    {% if page %}
+        {% if page.noindex %}<meta name="robots" content="noindex, follow">{% endif %}
         <link rel="canonical" href="{{ page.full_url }}">
     {% else %}
-        {# На случай не-Wagtail views (если есть) #}
+        {# Не-Wagtail views (поиск, кабинет, вход) #}
+        <meta name="description" content="{% block meta_description %}Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы{% endblock %}">
+        <title>{% block title %}Сфера Сознания{% endblock %} | Центр космоэнергетики и кинезиологии</title>
         <link rel="canonical" href="{{ request.build_absolute_uri }}">
     {% endif %}
 

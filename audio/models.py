@@ -4,11 +4,11 @@ from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
 from wagtail.documents.models import Document
 # Если аудио-файлы будем хранить в Wagtail Documents
-from wagtailmetadata.models import MetadataPageMixin
+from base.seo import SeoPageMixin
 
 from blog.models import Category  # общие категории (в твоём файле blog_models.py)
 
-class AudioIndexPage(MetadataPageMixin, Page):
+class AudioIndexPage(SeoPageMixin, Page):
     intro = RichTextField(blank=True, verbose_name="Введение")
 
     content_panels = Page.content_panels + [
@@ -40,7 +40,7 @@ class AudioIndexPage(MetadataPageMixin, Page):
         verbose_name = "Индекс аудио уроков"
 
 
-class AudioPage(MetadataPageMixin, Page):
+class AudioPage(SeoPageMixin, Page):
     date = models.DateField(verbose_name="Дата публикации")
     duration = models.CharField(max_length=20, blank=True, verbose_name="Длительность (например, 15:34)")
     intro = RichTextField(blank=True, verbose_name="Описание урока")
