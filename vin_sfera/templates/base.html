@@ -8,12 +8,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load wagtailmetadata_tags %}
     {% if page.get_meta_title %}
-        {# Страницы Wagtail: title, description, OG/Twitter из полей «Продвижение» #}
-        {% meta_tags page %}
-        {% if page.robots_noindex %}<meta name="robots" content="noindex, follow">{% endif %}
-        <link rel="canonical" href="{{ page.full_url }}">
+        {# Страницы Wagtail: title, description, OG/Twitter из полей «SEO и продвижение» #}
+        {% include "includes/seo_meta.html" %}
     {% else %}
         {# Не-Wagtail views (поиск, кабинет, вход) #}
         <meta name="description" content="{% block meta_description %}Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы{% endblock %}">
