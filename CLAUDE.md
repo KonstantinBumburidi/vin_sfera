@@ -26,6 +26,13 @@
 - **Сервер** — Ubuntu 24.04, проект в `~/vin_sfera/vin_sfera`, venv `~/vin_sfera/sfe_envir`,
   systemd-сервис `vin_sfera`, nginx (http и www → 301 на https://al-sfera.kz).
 - Свежая копия базы и media с сервера на ноутбук: `./scripts/pull_from_prod.sh` (`--no-media` — только база).
+- Сервер работает на `settings.dev` (так по умолчанию в `manage.py` и `wsgi.py`). Отличия сервера задаются:
+  - `vin_sfera/settings/local.py` (не в git, подключается в конце `dev.py`) — там `DEBUG = False`;
+  - `.env` — БД и `WAGTAILADMIN_BASE_URL=https://al-sfera.kz`.
+- static и media раздаёт nginx, страницы ошибок — `templates/404.html`, `500.html`.
+  Ошибки сайта смотреть в журнале: `sudo journalctl -u vin_sfera -n 100`.
+- Не сделано: `SECRET_KEY` из `dev.py` лежит в git — на сервере нужен свой ключ из `.env`;
+  `ALLOWED_HOSTS = ["*"]` — лучше `["al-sfera.kz"]`. В идеале перевести сервер на `settings.production`.
 
 ## Деплой на сервер
 ```bash
