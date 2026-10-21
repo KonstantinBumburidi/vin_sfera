@@ -106,11 +106,10 @@ AUTHENTICATION_BACKENDS = [
 
 # Регистрация с подтверждением email
 
-ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"   # ("mandatory" ) обязательно подтверждение
-ACCOUNT_AUTHENTICATION_METHOD = "username"
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_LOGIN_METHODS = {"username"}
+# «*» — обязательное поле: email необязателен, логин и пароль дважды — обязательны
+ACCOUNT_SIGNUP_FIELDS = ["email", "username*", "password1*", "password2*"]
 # ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False             # дополнительно отключаем любые попытки подтверждения
 
@@ -239,7 +238,8 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "http://127.0.0.1:8000"
+# На сервере в .env: WAGTAILADMIN_BASE_URL=https://al-sfera.kz
+WAGTAILADMIN_BASE_URL = env("WAGTAILADMIN_BASE_URL", default="http://127.0.0.1:8000")
 
 # Allowed file extensions for documents in the document library.
 # This can be omitted to allow all files, but note that this may present a security risk
@@ -247,3 +247,7 @@ WAGTAILADMIN_BASE_URL = "http://127.0.0.1:8000"
 # see https://docs.wagtail.org/en/stable/advanced_topics/deploying.html#user-uploaded-files
 WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip', 'mp3']
 
+
+# wagtailmenus 4.1.1 объявляет content_panels/settings_panels у сниппетов меню —
+# предупреждение из сторонней библиотеки, на работу меню не влияет
+SILENCED_SYSTEM_CHECKS = ["wagtailadmin.W002"]
