@@ -2,11 +2,14 @@ from django.db import models
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.admin.widgets.slug import SlugInput
+from wagtail.images import get_image_model
 
 SITE_NAME = "Сфера Сознания"
 DEFAULT_DESCRIPTION = "Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы"
 # Размер картинки для соцсетей (рекомендация Facebook/Telegram/WhatsApp)
 SEO_IMAGE_FILTER = "fill-1200x630"
+# Картинка для соцсетей у страниц без своей — имя файла из «Изображений»
+DEFAULT_SEO_IMAGE = "posv95.jpg"
 
 
 class SeoPageMixin(models.Model):
@@ -56,8 +59,11 @@ class SeoPageMixin(models.Model):
         return " ".join((self.search_description or DEFAULT_DESCRIPTION).split())
 
     def get_meta_image(self):
-        if self.search_image:
-            return self.search_image.get_rendition(SEO_IMAGE_FILTER)
+        image = self.search_image or get_image_model().objects.filter(
+            file__endswith=f"/{DEFAULT_SEO_IMAGE}"
+        ).first()
+        if image:
+            return image.get_rendition(SEO_IMAGE_FILTER)
         return None
 
     @property
