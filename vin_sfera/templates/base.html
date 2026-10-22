@@ -165,6 +165,9 @@
                     Бэлла Владимировна Бумбуриди<br>
                     <a href="tel:+77776869975" class="hover:underline transition text-cyan-700">
                         +7 777-686-9975
+                    </a><br>
+                    <a href="https://t.me/boltova78" target="_blank" rel="noopener" class="hover:underline transition text-cyan-700">
+                        Написать в Telegram
                     </a>
                 </p>
             </div>
@@ -192,6 +195,15 @@
                                 <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition">
                                     {% image settings.instagram_icon width-48 as ig_img %}
                                     <img src="{{ ig_img.url }}" alt="Instagram" class="w-12 h-12">
+                                </a>
+                            {% endif %}
+
+                            {% if settings.telegram_channel_url %}
+                                <a href="{{ settings.telegram_channel_url }}" target="_blank" rel="noopener" class="hover:opacity-70 transition" title="Наш Telegram-канал">
+                                    <svg class="w-12 h-12" viewBox="0 0 48 48" role="img" aria-label="Telegram">
+                                        <circle cx="24" cy="24" r="24" fill="#229ED9"/>
+                                        <path fill="#fff" d="M10.9 23.4l23.1-8.9c1.1-.4 2 .3 1.7 1.9l-3.9 18.5c-.3 1.3-1.1 1.6-2.2 1l-6-4.4-2.9 2.8c-.3.3-.6.6-1.2.6l.4-6.1 11.1-10c.5-.4-.1-.7-.7-.3l-13.7 8.6-5.9-1.8c-1.3-.4-1.3-1.3.2-1.9z"/>
+                                    </svg>
                                 </a>
                             {% endif %}
                         </div>

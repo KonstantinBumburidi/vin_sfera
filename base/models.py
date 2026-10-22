@@ -16,6 +16,11 @@ class NavigationSettings(BaseGenericSetting):
     vk_url = models.URLField(blank=True, verbose_name="VK")
     facebook_url = models.URLField(blank=True, verbose_name="Facebook")
     instagram_url = models.URLField(blank=True, verbose_name="Instagram")
+    telegram_channel_url = models.URLField(
+        blank=True,
+        verbose_name="Telegram-канал",
+        help_text="Например, https://t.me/sfera_soznaniya. Иконка в подвале появится, когда ссылка заполнена.",
+    )
 
     # Иконки (из медиа-галереи Wagtail)
     vk_icon = models.ForeignKey(
@@ -56,6 +61,7 @@ class NavigationSettings(BaseGenericSetting):
                 FieldPanel("facebook_icon"),
                 FieldPanel("instagram_url"),
                 FieldPanel("instagram_icon"),
+                FieldPanel("telegram_channel_url"),
             ],
             heading="Социальные сети",
         ),

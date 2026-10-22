@@ -37,7 +37,9 @@ def organization_jsonld():
             "latitude": 43.233155,
             "longitude": 76.875867,
         },
-        "sameAs": [url for url in (nav.instagram_url, nav.vk_url, nav.facebook_url) if url],
+        "sameAs": [
+            url for url in (nav.instagram_url, nav.vk_url, nav.facebook_url, nav.telegram_channel_url) if url
+        ],
     }
     # Экранируем «<», чтобы текст не мог закрыть тег <script>
     text = json.dumps(data, ensure_ascii=False, indent=2).replace("<", "\\u003c")
