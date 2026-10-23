@@ -29,6 +29,10 @@ urlpatterns = [
         template_name='yandex_6da6814435e0cb91.html',
         content_type='text/html'
     )),
+    path('yandex_8e8a649b7e316943.html', TemplateView.as_view(
+        template_name='yandex_8e8a649b7e316943.html',
+        content_type='text/html'
+    )),
 
 ]
 
