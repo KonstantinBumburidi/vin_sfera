@@ -1,7 +1,7 @@
 {% load static wagtailsettings_tags %}
 {% get_settings use_default_site=True as settings %}
 {% load wagtailcore_tags wagtailimages_tags %}
-{% load static wagtailcore_tags wagtailsettings_tags wagtailimages_tags menu_tags seo_tags %}
+{% load static wagtailcore_tags wagtailsettings_tags wagtailimages_tags seo_tags site_menu_tags %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -27,92 +27,84 @@
     <!-- Overlay для мобильного меню -->
     <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 hidden"></div>
 
-    <!-- Хедер -->
+    <!-- Хедер. Пункты меню — base/site_menu.py -->
+    {% site_menu as menu %}
     <header class="bg-cyan-700 shadow-lg sticky top-0 z-50">
+        <!-- Строка 1: логотип, практики, поиск, кабинет -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between py-4">
-                <!-- Логотип + десктоп меню (сгруппированы влево) -->
+            <div class="flex items-center justify-between py-3">
                 <div class="flex items-center gap-8">
                     <a href="/" class="flex items-center">
                         <img src="{% static '/home/images/logo.jpg' %}" alt="Логотип Сфера Сознания" class="w-14 h-14 object-cover rounded-full ring-4 ring-cyan-500/30">
                     </a>
-
-                    <!-- Форма поиска (десктоп) -->
-                    <!--
-                    <div class="flex-1 max-w-md mx-8 hidden md:block">
-                        <form action="{% url 'search' %}" method="get" class="relative">
-                            <input
-                                type="text"
-                                name="query"
-                                placeholder="Поиск по сайту..."
-                                class="w-full pl-12 pr-6 py-3 rounded-full bg-white/90 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 shadow-md transition"
-                                {% if request.GET.query %}value="{{ request.GET.query }}"{% endif %}
-                            >
-                            <button type="submit" class="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-700">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                                </svg>
-                            </button>
-                        </form>
-                    </div>
-                   -->
-
-                    <!-- Десктоп меню -->
-                    <nav class="hidden md:flex items-center space-x-8 text-lg font-medium">
-                        {% main_menu template="menus/main/desktop.html" %}
+                    <nav class="hidden md:block" aria-label="Главное меню">
+                        <ul class="flex items-center md:gap-5 lg:gap-8 md:text-base lg:text-lg font-medium">
+                            {% for it in menu.row_1 %}{% include "includes/menu/desktop_item.html" %}{% endfor %}
+                        </ul>
                     </nav>
                 </div>
 
-                <!-- Правая часть: кабинет + бургер -->
+                <!-- Правая часть: поиск, кабинет, бургер -->
                 <div class="flex items-center gap-4">
-                    {% if request.user.is_authenticated %}
-                        <a href="/cabinet/" class="hidden md:inline-flex items-center gap-1.5 text-white border border-white/40 hover:bg-white/15 transition rounded-full px-4 py-1.5 text-sm font-medium">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            Кабинет
-                        </a>
-                    {% else %}
-                        <a href="/accounts/login/" class="hidden md:inline-flex items-center gap-1.5 text-white border border-white/40 hover:bg-white/15 transition rounded-full px-4 py-1.5 text-sm font-medium">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            Войти
-                        </a>
-                    {% endif %}
+                    <a href="{% url 'search' %}" title="Поиск по сайту" aria-label="Поиск по сайту" class="hidden md:inline-flex text-white hover:text-cyan-300 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </a>
+                    <a href="{% if request.user.is_authenticated %}/cabinet/{% else %}/accounts/login/{% endif %}" class="hidden md:inline-flex items-center gap-1.5 text-white border border-white/40 hover:bg-white/15 transition rounded-full px-4 py-1.5 text-sm font-medium">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        {% if request.user.is_authenticated %}Кабинет{% else %}Войти{% endif %}
+                    </a>
 
-                <!-- Бургер -->
-                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
-                    <svg class="h-8 w-8 open-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    <svg class="h-8 w-8 close-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                </div><!-- /правая часть -->
-            </div>
-
-            <!-- Мобильное меню (сайдбар) -->
-            <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-cyan-800 z-50 pt-20 px-6 -translate-x-full transition-transform duration-300 overflow-y-auto">
-                {% main_menu template="menus/main/mobile.html" %}
-                <div class="mt-8 border-t border-cyan-600 pt-6">
-                    {% if request.user.is_authenticated %}
-                        <a href="/cabinet/" class="flex items-center gap-2 text-white hover:text-cyan-300 transition text-lg font-medium">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            Кабинет
-                        </a>
-                    {% else %}
-                        <a href="/accounts/login/" class="flex items-center gap-2 text-white hover:text-cyan-300 transition text-lg font-medium">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            Войти
-                        </a>
-                    {% endif %}
+                    <!-- Бургер -->
+                    <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none" aria-label="Меню">
+                        <svg class="h-8 w-8 open-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="h-8 w-8 close-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Строка 2: материалы — тоньше, темнее, мельче -->
+        <div class="hidden md:block bg-cyan-800/70 border-t border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="lg:pl-[88px] py-1.5" aria-label="Материалы">
+                    <ul class="flex items-center md:gap-5 lg:gap-8 text-base font-normal">
+                        {% for it in menu.row_2 %}{% include "includes/menu/desktop_item.html" %}{% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Мобильное меню (сайдбар) -->
+        <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-72 bg-cyan-800 z-50 pt-20 px-6 pb-10 -translate-x-full transition-transform duration-300 overflow-y-auto">
+            <nav class="flex flex-col space-y-5 text-lg font-medium">
+                {% for it in menu.row_1 %}{% include "includes/menu/mobile_item.html" %}{% endfor %}
+            </nav>
+            <div class="mt-6 pt-6 border-t border-cyan-600">
+                <nav class="flex flex-col space-y-5 text-lg font-medium">
+                    {% for it in menu.row_2 %}{% include "includes/menu/mobile_item.html" %}{% endfor %}
+                </nav>
+            </div>
+            <div class="mt-6 pt-6 border-t border-cyan-600 space-y-4">
+                <a href="{% url 'search' %}" class="flex items-center gap-2 text-white hover:text-cyan-300 transition text-lg font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    Поиск
+                </a>
+                <a href="{% if request.user.is_authenticated %}/cabinet/{% else %}/accounts/login/{% endif %}" class="flex items-center gap-2 text-white hover:text-cyan-300 transition text-lg font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    {% if request.user.is_authenticated %}Кабинет{% else %}Войти{% endif %}
+                </a>
             </div>
         </div>
     </header>

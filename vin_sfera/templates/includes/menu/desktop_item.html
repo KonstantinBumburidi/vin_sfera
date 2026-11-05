@@ -1,0 +1,27 @@
+{# Один пункт десктоп-меню (с выпадающим списком, если есть подпункты). Данные — base/site_menu.py #}
+<li class="{% if it.children %}relative group{% endif %}">
+    {% if it.url %}
+        <a href="{{ it.url }}" class="flex items-center hover:text-cyan-300 transition py-1 {% if it.active %}text-cyan-200 underline underline-offset-4{% else %}text-white{% endif %}">{{ it.title }}</a>
+    {% else %}
+        <span tabindex="0" class="flex items-center hover:text-cyan-300 transition py-1 cursor-default focus:outline-none {% if it.active %}text-cyan-200{% else %}text-white{% endif %}">
+            {{ it.title }}
+            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </span>
+    {% endif %}
+
+    {% if it.children %}
+        <ul class="absolute left-0 top-full w-60 bg-cyan-700 rounded-lg shadow-lg py-2 z-50
+                   opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                   group-focus-within:opacity-100 group-focus-within:visible
+                   pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto
+                   transition-all duration-300 ease-in-out text-base font-normal">
+            {% for ch in it.children %}
+                <li>
+                    <a href="{{ ch.url }}" class="block px-4 py-2 hover:bg-cyan-600 hover:text-cyan-200 transition {% if ch.active %}bg-cyan-600 text-cyan-100{% else %}text-white{% endif %}">{{ ch.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>

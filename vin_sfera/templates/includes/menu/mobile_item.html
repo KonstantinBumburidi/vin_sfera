@@ -1,0 +1,15 @@
+{# Один пункт мобильного меню. Данные — base/site_menu.py #}
+<div>
+    {% if it.url %}
+        <a href="{{ it.url }}" class="hover:text-cyan-300 transition block {% if it.active %}text-cyan-200 font-bold{% else %}text-white{% endif %}">{{ it.title }}</a>
+    {% else %}
+        <span class="block {% if it.active %}text-cyan-200{% else %}text-white{% endif %}">{{ it.title }}</span>
+    {% endif %}
+    {% if it.children %}
+        <div class="ml-6 mt-2 space-y-3">
+            {% for ch in it.children %}
+                <a href="{{ ch.url }}" class="hover:text-cyan-300 transition block text-base {% if ch.active %}text-cyan-200 font-bold{% else %}text-white/80{% endif %}">{{ ch.title }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

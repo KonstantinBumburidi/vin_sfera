@@ -20,6 +20,9 @@
 - `channels`, `feed`, `account` — личный кабинет, каналы, лента
 - `spblock`, `search`
 - Шаблоны сайта: `vin_sfera/templates/` (`base.html`, `includes/seo_meta.html`)
+- Главное меню (две строки в шапке) задано в коде: `base/site_menu.py`, вывод — `includes/menu/*.html`.
+  wagtailmenus установлен, но в шапке больше не используется. Пункты с `url=None` на сайте скрыты.
+  Ссылки в меню записаны текстом: при смене slug страницы (админка или `seo/pages.yaml`) обновить и `site_menu.py`.
 
 ## Где что работает
 - **Ноутбук** — разработка. Код идёт ноутбук → GitHub → сервер.
