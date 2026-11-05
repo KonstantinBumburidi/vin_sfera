@@ -89,3 +89,93 @@ class AudioPage(SeoPageMixin, Page):
     class Meta:
         verbose_name = "Аудио урок"
 
+
+
+#-----------------------------------------------------------
+# Музыка — устроена так же, как аудиоуроки, но со своими категориями
+# (в «Категориях» выбрать раздел «Музыка»)
+#-----------------------------------------------------------
+MUSIC_SECTION = 5
+
+
+class MusicIndexPage(SeoPageMixin, Page):
+    intro = RichTextField(blank=True, verbose_name="Введение")
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro'),
+    ]
+
+    subpage_types = ['audio.MusicPage']
+
+    def get_context(self, request):
+        context = super().get_context(request)
+
+        context['categories'] = Category.objects.filter(section=MUSIC_SECTION).annotate(
+            music_count=models.Count('music_pages')
+        ).order_by('title')
+
+        tracks = MusicPage.objects.child_of(self).live().order_by('-date')
+        context['total_count'] = tracks.count()
+
+        category_id = request.GET.get('category')
+        if category_id:
+            try:
+                tracks = tracks.filter(category__id=int(category_id), category__section=MUSIC_SECTION)
+            except ValueError:
+                pass
+
+        context['tracks'] = tracks
+        return context
+
+    class Meta:
+        verbose_name = "Индекс музыки"
+
+
+class MusicPage(SeoPageMixin, Page):
+    always_noindex = True  # короткие страницы, как и аудиоуроки
+
+    date = models.DateField(verbose_name="Дата публикации")
+    duration = models.CharField(max_length=20, blank=True, verbose_name="Длительность (например, 15:34)")
+    intro = RichTextField(blank=True, verbose_name="Описание")
+    audio_file = models.ForeignKey(
+        'wagtaildocs.Document',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        verbose_name="Аудио-файл (mp3)"
+    )
+    external_url = models.URLField(blank=True, verbose_name="Внешняя ссылка на аудио")
+    main_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        verbose_name="Обложка"
+    )
+    category = models.ForeignKey(
+        Category,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='music_pages',
+        limit_choices_to={'section': MUSIC_SECTION},
+        verbose_name="Категория",
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('date'),
+        FieldPanel('duration'),
+        FieldPanel('category'),
+        FieldPanel('main_image'),
+        FieldPanel('intro'),
+        FieldPanel('audio_file'),
+        FieldPanel('external_url'),
+    ]
+
+    parent_page_types = ['audio.MusicIndexPage']
+    subpage_types = []
+
+    class Meta:
+        verbose_name = "Музыкальный трек"
