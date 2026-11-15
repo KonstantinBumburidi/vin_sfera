@@ -9,8 +9,19 @@
                 <div class="rich-text mb-12 text-lg">{{ page.intro|richtext }}</div>
             {% endif %}
 
+            {% if toc and toc_after == -1 %}{% include "home/includes/section_toc.html" %}{% endif %}
+
             {% for block in page.body %}
                 {% include_block block %}
+                {% if toc %}
+                    {% if forloop.counter0 == toc_after %}
+                        {% include "home/includes/section_toc.html" %}
+                    {% elif block.value.anchor %}
+                        <p class="-mt-8 mb-12 text-right max-w-5xl mx-auto">
+                            <a href="#toc" class="text-sm text-cyan-700 hover:underline">↑ к содержанию</a>
+                        </p>
+                    {% endif %}
+                {% endif %}
             {% endfor %}
         </div>
     </section>

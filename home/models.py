@@ -56,6 +56,43 @@ class SectionPage(SeoPageMixin, Page):
     # Ограничиваем, чтобы эти страницы были только дочерними главной
     parent_page_types = ['home.HomePage']
 
+    TOC_MIN_ITEMS = 3  # оглавление показывается, если блоков с якорем не меньше
+
+    def build_toc(self):
+        """Оглавление из блоков «Текст» с якорем.
+
+        Блок без подзаголовка (например, «Вмятины в биополе») начинает новую группу.
+        Возвращает (группы, индекс блока, после которого вывести оглавление).
+        """
+        groups = [{"title": None, "anchor": None, "items": []}]
+        count = 0
+        for block in self.body:
+            value = block.value
+            anchor = value.get("anchor") if hasattr(value, "get") else None
+            if not anchor:
+                continue
+            title = (value.get("title") or "").strip().rstrip(".")
+            if title.isupper():
+                title = title.capitalize()
+            desc = strip_tags(str(value.get("description") or "")).strip().rstrip(".")
+            if desc:
+                groups[-1]["items"].append({"anchor": anchor, "title": title, "desc": desc})
+            else:
+                groups.append({"title": title, "anchor": anchor, "items": []})
+            count += 1
+        if count < self.TOC_MIN_ITEMS:
+            return [], -1
+        groups = [g for g in groups if g["title"] or g["items"]]
+        # Если первый блок — вступление без якоря («Обзор»), оглавление идёт после него
+        first = self.body[0].value if len(self.body) else None
+        after = 0 if first is not None and hasattr(first, "get") and not first.get("anchor") else -1
+        return groups, after
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context["toc"], context["toc_after"] = self.build_toc()
+        return context
+
 class ChannelSectionPage(SeoPageMixin, Page):
     intro = RichTextField(blank=True, verbose_name="Введение ")
     body = StreamField([

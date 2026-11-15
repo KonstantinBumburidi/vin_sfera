@@ -1,0 +1,23 @@
+{# Оглавление страницы раздела: собирается из блоков с якорем (SectionPage.build_toc) #}
+<nav id="toc" class="scroll-mt-24 md:scroll-mt-40 bg-cyan-50 border border-cyan-200 rounded-lg shadow p-6 md:p-8 mb-12 max-w-5xl mx-auto" aria-label="Содержание">
+    <h2 class="text-2xl font-bold text-cyan-800 mb-4">Содержание</h2>
+    {% for group in toc %}
+        {% if group.title %}
+            <h3 class="text-xl font-semibold text-cyan-800 mt-6 mb-3">
+                <a href="#{{ group.anchor }}" class="hover:underline">{{ group.title }}</a>
+            </h3>
+        {% endif %}
+        {% if group.items %}
+            <ul class="grid gap-x-8 gap-y-3 md:grid-cols-2">
+                {% for it in group.items %}
+                    <li>
+                        <a href="#{{ it.anchor }}" class="group block rounded px-2 py-1 -mx-2 hover:bg-white">
+                            <span class="font-semibold text-cyan-700 group-hover:underline">{{ it.title }}</span>
+                            <span class="block text-sm text-gray-600">{{ it.desc }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endfor %}
+</nav>
