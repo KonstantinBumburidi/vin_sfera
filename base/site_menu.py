@@ -11,7 +11,6 @@
 в админке или через seo/pages.yaml — поменяйте ссылку и здесь.
 """
 
-
 def item(title, url=None, children=None):
     return {"title": title, "url": url, "children": children or []}
 
@@ -47,10 +46,8 @@ ROW_2 = [
     item("Новости", "/novosty/"),
 ]
 
-
 def _is_active(url, path):
     return bool(url) and (path == url or path.startswith(url))
-
 
 def build_row(row, path):
     """Убирает неготовые пункты и отмечает раздел, в котором находится посетитель."""
