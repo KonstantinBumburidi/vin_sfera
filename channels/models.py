@@ -34,6 +34,7 @@ class ChannelGroup(ClusterableModel):
     SECTION_CHOICES = [
         (1, "Световые частоты"),
         (2, "Космоэнергетика"),
+        (3, "Каналы Майя"),
     ]
 
     title = models.CharField(max_length=200, verbose_name="Название группы (Матрица / Блок)")

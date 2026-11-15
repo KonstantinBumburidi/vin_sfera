@@ -22,7 +22,7 @@ ROW_1 = [
     item("Космоэнергетика", None, [
         item("Матрицы Архангелов", "/svet_freq/"),
         item("Классические каналы", "/kosmoenergy/"),
-        item("Каналы Мая"),                      # планируется
+        item("Каналы Майя", "/kanaly-maya/"),
     ]),
     item("Кинезиология", "/kineziolog/"),
     item("Биорезонанс", "/biorezonans/"),
