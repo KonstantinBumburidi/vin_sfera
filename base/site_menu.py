@@ -18,7 +18,7 @@ def item(title, url=None, children=None):
 
 # Строка 1 — центр и практики (крупно)
 ROW_1 = [
-    item("О нас", "/about_/"),
+    item("О нас", "/about/"),
     item("Космоэнергетика", None, [
         item("Матрицы Архангелов", "/svet_freq/"),
         item("Классические каналы", "/kosmoenergy/"),
