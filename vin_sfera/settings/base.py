@@ -251,3 +251,7 @@ WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'tx
 # wagtailmenus 4.1.1 объявляет content_panels/settings_panels у сниппетов меню —
 # предупреждение из сторонней библиотеки, на работу меню не влияет
 SILENCED_SYSTEM_CHECKS = ["wagtailadmin.W002"]
+
+# Google Tag Manager (через него подключена Google Analytics).
+# Код вставляется только когда DEBUG = False, т. е. на сервере, — визиты с ноутбука не считаются.
+GTM_ID = "GTM-MJBG3292"

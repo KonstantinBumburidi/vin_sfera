@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    {% include "includes/gtm_head.html" %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% if page.get_meta_title %}
@@ -23,6 +24,7 @@
     {% organization_jsonld %}
 </head>
 <body class="antialiased text-gray-800 bg-gray-100 font-sans min-h-screen flex flex-col">
+    {% include "includes/gtm_body.html" %}
 
     <!-- Overlay для мобильного меню -->
     <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 hidden"></div>

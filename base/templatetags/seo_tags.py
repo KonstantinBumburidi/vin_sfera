@@ -44,3 +44,12 @@ def organization_jsonld():
     # Экранируем «<», чтобы текст не мог закрыть тег <script>
     text = json.dumps(data, ensure_ascii=False, indent=2).replace("<", "\\u003c")
     return mark_safe(f'<script type="application/ld+json">\n{text}\n</script>')
+
+
+@register.simple_tag
+def gtm_id():
+    """ID Google Tag Manager или пустая строка (на ноутбуке, где DEBUG = True)."""
+    from django.conf import settings
+    if settings.DEBUG:
+        return ""
+    return getattr(settings, "GTM_ID", "")
