@@ -57,7 +57,10 @@ sudo systemctl restart vin_sfera
 - Картинка для соцсетей по умолчанию: `DEFAULT_SEO_IMAGE` в `base/seo.py` (имя файла в Wagtail Images).
   Сейчас `posv95.jpg` — она 769×403, лучше заменить на ≥1200×630.
 - JSON-LD организации (адрес ул. Сатпаева 90/4, координаты 43.233155, 76.875867): `base/templatetags/seo_tags.py`.
-- Тексты SEO (title, description, slug) хранятся в `seo/pages.yaml` — это главный источник:
+- Смена адреса через `seo/pages.yaml`: ключ записи — новый адрес, поле `old_url` — нынешний
+  (меняется только последняя часть адреса). `apply_seo` меняет slug, Wagtail сам делает 301 со старого адреса.
+  Строка `image: ''` очищает картинку для соцсетей — у статей с обложкой поле `image` не указывать.
+- Тексты SEO (title, description, noindex, картинка) хранятся в `seo/pages.yaml` — это главный источник:
   1. на ноутбуке `python3 manage.py export_seo` (по свежей копии базы с сервера);
   2. правка `seo/pages.yaml` → git push;
   3. на сервере `python3 manage.py apply_seo --dry-run`, потом `apply_seo`

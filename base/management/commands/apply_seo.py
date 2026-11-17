@@ -33,6 +33,14 @@ class Command(BaseCommand):
         for key, entry in data.items():
             entry = entry or {}
             page = find_page(key, site)
+            new_slug = None
+            if page is None and entry.get("old_url"):
+                # смена адреса: страница пока живёт по old_url, ключ — новый адрес
+                page, new_slug, error = self.find_renamed(key, entry["old_url"], site)
+                if error:
+                    self.stdout.write(self.style.ERROR(f"{key}: {error}"))
+                    stats["errors"] += 1
+                    continue
             if page is None:
                 self.stdout.write(self.style.ERROR(f"{key}: страница не найдена"))
                 stats["errors"] += 1
@@ -45,6 +53,8 @@ class Command(BaseCommand):
 
             try:
                 changes = self.get_changes(page, entry)
+                if new_slug:
+                    changes["slug"] = (page.slug, new_slug)
             except ValueError as e:
                 self.stdout.write(self.style.ERROR(f"{key}: {e}"))
                 stats["errors"] += 1
@@ -82,6 +92,20 @@ class Command(BaseCommand):
         ))
         if dry_run and stats["changed"]:
             self.stdout.write("Это была проверка (--dry-run). Чтобы записать: python3 manage.py apply_seo")
+
+    def find_renamed(self, key, old_url, site):
+        """Страница по старому адресу и её новый slug из ключа. Возвращает (page, slug, ошибка)."""
+        page = find_page(old_url, site)
+        if page is None:
+            return None, None, f"страница не найдена ни по новому адресу, ни по old_url {old_url}"
+        new_parts, old_parts = key.strip("/").split("/"), old_url.strip("/").split("/")
+        if not key.strip("/") or new_parts[:-1] != old_parts[:-1]:
+            return None, None, (f"менять можно только последнюю часть адреса "
+                                f"(old_url {old_url} и ключ должны быть в одном разделе)")
+        slug = new_parts[-1]
+        if page.get_siblings(inclusive=False).filter(slug=slug).exists():
+            return None, None, f"адрес «{slug}» в этом разделе уже занят другой страницей"
+        return page.specific, slug, None
 
     def get_changes(self, page, entry):
         """{поле страницы: (старое, новое)} только для отличающихся значений."""
