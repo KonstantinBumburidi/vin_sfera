@@ -114,7 +114,7 @@ class MusicIndexPage(SeoPageMixin, Page):
             music_count=models.Count('music_pages')
         ).order_by('title')
 
-        tracks = MusicPage.objects.child_of(self).live().order_by('-date')
+        tracks = MusicPage.objects.child_of(self).live().order_by('-date', 'title')
         context['total_count'] = tracks.count()
 
         category_id = request.GET.get('category')

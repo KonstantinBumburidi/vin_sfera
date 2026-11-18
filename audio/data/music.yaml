@@ -1,0 +1,28 @@
+# Треки страницы «Музыка» (/materials/music/). Загрузка: python3 manage.py import_music --source <папка с mp3>
+# title — название на сайте, file — имя mp3 в папке, duration — длительность,
+# intro — описание (можно дописать позже, пусто — без описания).
+tracks:
+  - title: "Дорожка 01"
+    file: "Дорожка 01.mp3"
+    duration: "17:53"
+    intro: ""
+  - title: "Дорожка 02"
+    file: "Дорожка 02.mp3"
+    duration: "17:10"
+    intro: ""
+  - title: "Дорожка 03"
+    file: "Дорожка 03.mp3"
+    duration: "18:37"
+    intro: ""
+  - title: "Дорожка 04"
+    file: "Дорожка 04.mp3"
+    duration: "25:24"
+    intro: ""
+  - title: "Дорожка 05"
+    file: "Дорожка 05.mp3"
+    duration: "25:24"
+    intro: ""
+  - title: "Дорожка 06"
+    file: "Дорожка 06.mp3"
+    duration: "33:27"
+    intro: ""
