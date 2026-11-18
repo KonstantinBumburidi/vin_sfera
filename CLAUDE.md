@@ -54,8 +54,9 @@ sudo systemctl restart vin_sfera
 - Мета-теги — собственные (wagtail-metadata удалён): `base/seo.py` → `SeoPageMixin` на всех моделях страниц
   (картинка для соцсетей `search_image`, флажок noindex; страницы видео/аудио всегда noindex),
   вывод — `templates/includes/seo_meta.html`.
-- Картинка для соцсетей по умолчанию: `DEFAULT_SEO_IMAGE` в `base/seo.py` (имя файла в Wagtail Images).
-  Сейчас `posv95.jpg` — она 769×403, лучше заменить на ≥1200×630.
+- Картинка для соцсетей по умолчанию: `DEFAULT_SEO_IMAGES` в `base/seo.py` (имена файлов в Wagtail Images,
+  берётся первая найденная): `sfera-social.jpg` (1200×630, крылья, сгенерирована нейросетью; загружается
+  в админке «Изображения»), запасная — старая `posv95.jpg` (807×403).
 - JSON-LD организации (адрес ул. Сатпаева 90/4, координаты 43.233155, 76.875867): `base/templatetags/seo_tags.py`.
 - Смена адреса через `seo/pages.yaml`: ключ записи — новый адрес, поле `old_url` — нынешний
   (меняется только последняя часть адреса). `apply_seo` меняет slug, Wagtail сам делает 301 со старого адреса.

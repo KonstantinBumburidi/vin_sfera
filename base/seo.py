@@ -8,8 +8,18 @@ SITE_NAME = "Сфера Сознания"
 DEFAULT_DESCRIPTION = "Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы"
 # Размер картинки для соцсетей (рекомендация Facebook/Telegram/WhatsApp)
 SEO_IMAGE_FILTER = "fill-1200x630"
-# Картинка для соцсетей у страниц без своей — имя файла из «Изображений»
-DEFAULT_SEO_IMAGE = "posv95.jpg"
+# Картинка для соцсетей у страниц без своей — имена файлов из «Изображений»,
+# берётся первая найденная (posv95.jpg — запасная, пока новую не загрузили)
+DEFAULT_SEO_IMAGES = ("sfera-social.jpg", "posv95.jpg")
+
+
+def default_seo_image():
+    Image = get_image_model()
+    for name in DEFAULT_SEO_IMAGES:
+        image = Image.objects.filter(file__endswith=f"/{name}").first()
+        if image:
+            return image
+    return None
 
 
 class SeoPageMixin(models.Model):
@@ -59,9 +69,7 @@ class SeoPageMixin(models.Model):
         return " ".join((self.search_description or DEFAULT_DESCRIPTION).split())
 
     def get_meta_image(self):
-        image = self.search_image or get_image_model().objects.filter(
-            file__endswith=f"/{DEFAULT_SEO_IMAGE}"
-        ).first()
+        image = self.search_image or default_seo_image()
         if image:
             return image.get_rendition(SEO_IMAGE_FILTER)
         return None
