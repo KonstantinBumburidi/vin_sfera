@@ -283,3 +283,86 @@ class GlossaryPage(SeoPageMixin, Page):
 
     class Meta:
         verbose_name = "База знаний (словарь терминов)"
+
+
+#-----------------------------------------------------------------------------------
+# Шпаргалка «Эмоции и точки»: две схемы, таблица эмоций и техники коррекции.
+# Наполнение: home/data/emotion_points.yaml → python3 manage.py import_emotion_points
+
+class EmotionPointsPage(SeoPageMixin, Page):
+    intro = RichTextField(blank=True, verbose_name="Введение (текст сверху)")
+    points_image = models.ForeignKey(
+        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name="Схема: точки 1–14 на теле",
+    )
+    meridians_image = models.ForeignKey(
+        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name="Схема: точки меридианов",
+    )
+    instruction = models.TextField(
+        blank=True, verbose_name="Инструкция перед техниками",
+        help_text="Например: «Вспомнить тревожащую вас ситуацию, оценить её по 10-балльной шкале…»",
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro'),
+        FieldPanel('points_image'),
+        FieldPanel('meridians_image'),
+        InlinePanel('rows', label="Строки таблицы"),
+        FieldPanel('instruction'),
+        InlinePanel('techniques', label="Техники"),
+    ]
+
+    parent_page_types = ['home.HomePage']
+    subpage_types = []
+
+    search_fields = Page.search_fields + [
+        index.SearchField('intro'),
+        index.SearchField('instruction'),
+        index.RelatedFields('rows', [
+            index.SearchField('emotions'),
+            index.SearchField('meridian'),
+        ]),
+        index.RelatedFields('techniques', [
+            index.SearchField('title'),
+            index.SearchField('text'),
+        ]),
+    ]
+
+    class Meta:
+        verbose_name = "Шпаргалка «Эмоции и точки»"
+
+
+class EmotionPointRow(Orderable):
+    page = ParentalKey('home.EmotionPointsPage', on_delete=models.CASCADE, related_name='rows')
+    number = models.PositiveSmallIntegerField(verbose_name="№ точки")
+    emotions = models.TextField(verbose_name="Эмоции")
+    meridian = models.CharField(max_length=255, verbose_name="Меридиан")
+    hours = models.CharField(max_length=50, blank=True, verbose_name="Макс. активность (часы)",
+                             help_text="Например: 15–17")
+    muscle = models.CharField(max_length=255, blank=True, verbose_name="Связанная мышца")
+
+    panels = [
+        FieldPanel('number'),
+        FieldPanel('emotions'),
+        FieldPanel('meridian'),
+        FieldPanel('hours'),
+        FieldPanel('muscle'),
+    ]
+
+    def __str__(self):
+        return f"{self.number}. {self.meridian}"
+
+
+class EmotionTechnique(Orderable):
+    page = ParentalKey('home.EmotionPointsPage', on_delete=models.CASCADE, related_name='techniques')
+    title = models.CharField(max_length=255, verbose_name="Название")
+    text = RichTextField(verbose_name="Текст", features=['bold', 'italic', 'link', 'ol', 'ul'])
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('text'),
+    ]
+
+    def __str__(self):
+        return self.title

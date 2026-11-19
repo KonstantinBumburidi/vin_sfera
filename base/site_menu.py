@@ -35,7 +35,7 @@ ROW_2 = [
     ]),
     item("Шпаргалки", None, [
         item("Поля", "/materials/obolochka/"),
-        item("Эмоциональные точки"),             # планируется
+        item("Эмоции и точки", "/materials/emocii-i-tochki/"),
     ]),
     item("База знаний", "/baza-znaniy/"),
     item("Библиотека", None, [
