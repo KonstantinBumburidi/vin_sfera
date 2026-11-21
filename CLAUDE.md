@@ -29,6 +29,8 @@
 - **Сервер** — Ubuntu 24.04, проект в `~/vin_sfera/vin_sfera`, venv `~/vin_sfera/sfe_envir`,
   systemd-сервис `vin_sfera`, nginx (http и www → 301 на https://al-sfera.kz).
 - Свежая копия базы и media с сервера на ноутбук: `./scripts/pull_from_prod.sh` (`--no-media` — только база).
+- Бэкап базы на сервере: `./scripts/backup_db.sh` → `~/db_backups/prod_*.dump` (хранит 14 дней, `--keep N`);
+  восстановление: `./scripts/backup_db.sh --restore ФАЙЛ` (при остановленном `vin_sfera`). media в бэкап не входит.
 - Сервер работает на `settings.dev` (так по умолчанию в `manage.py` и `wsgi.py`). Отличия сервера задаются:
   - `vin_sfera/settings/local.py` (не в git, подключается в конце `dev.py`) — там `DEBUG = False`;
   - `.env` — БД и `WAGTAILADMIN_BASE_URL=https://al-sfera.kz`.
