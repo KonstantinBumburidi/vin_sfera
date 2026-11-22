@@ -4,8 +4,9 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.admin.widgets.slug import SlugInput
 from wagtail.images import get_image_model
 
-SITE_NAME = "Сфера Сознания"
-DEFAULT_DESCRIPTION = "Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы"
+SITE_NAME = "Путь Здоровья"
+DEFAULT_DESCRIPTION = ("Центр кинезиологии «Путь Здоровья» в Алматы: кинезиология, остеопатия, P-DTR, "
+                       "энергопсихология, биорезонанс")
 # Размер картинки для соцсетей (рекомендация Facebook/Telegram/WhatsApp)
 SEO_IMAGE_FILTER = "fill-1200x630"
 # Картинка для соцсетей у страниц без своей — имена файлов из «Изображений»,

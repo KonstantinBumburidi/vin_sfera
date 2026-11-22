@@ -14,8 +14,8 @@
         {% include "includes/seo_meta.html" %}
     {% else %}
         {# Не-Wagtail views (поиск, кабинет, вход) #}
-        <meta name="description" content="{% block meta_description %}Центр Сфера Сознания — космоэнергетика, кинезиология, биорезонанс в Алматы{% endblock %}">
-        <title>{% block title %}Сфера Сознания{% endblock %} | Центр космоэнергетики и кинезиологии</title>
+        <meta name="description" content="{% block meta_description %}Центр кинезиологии «Путь Здоровья» в Алматы: кинезиология, остеопатия, P-DTR, энергопсихология, биорезонанс{% endblock %}">
+        <title>{% block title %}Путь Здоровья{% endblock %} | Центр кинезиологии в Алматы</title>
         <link rel="canonical" href="{{ request.build_absolute_uri }}">
     {% endif %}
 
@@ -37,7 +37,7 @@
             <div class="flex items-center justify-between py-3">
                 <div class="flex items-center gap-8">
                     <a href="/" class="flex items-center">
-                        <img src="{% static '/home/images/logo.jpg' %}" alt="Логотип Сфера Сознания" class="w-14 h-14 object-cover rounded-full ring-4 ring-cyan-500/30">
+                        <img src="{% static '/home/images/logo.jpg' %}" alt="Логотип центра «Путь Здоровья»" class="w-14 h-14 object-cover rounded-full ring-4 ring-cyan-500/30">
                     </a>
                     <nav class="hidden md:block" aria-label="Главное меню">
                         <ul class="flex items-center md:gap-5 lg:gap-8 md:text-base lg:text-lg font-medium">
@@ -205,7 +205,7 @@
             <!-- Правая часть: Копирайт -->
             <div class="text-right md:text-right text-center">
                 <p class="text-lg">
-                    &copy; 2025 Сфера Сознания.<br>
+                    &copy; {% now "Y" %} Центр кинезиологии «Путь Здоровья».<br>
                     Все права защищены.
                 </p>
             </div>
