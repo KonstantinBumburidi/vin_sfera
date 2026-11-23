@@ -8,6 +8,11 @@ from wagtail.images.blocks import ImageChooserBlock
 # структурные блоки
 class HeroBlock(StructBlock):
     title = CharBlock(required=True, label="Заголовок")
+    subtitle = CharBlock(
+        required=False,
+        label="Подпись под заголовком (мелким шрифтом)",
+        help_text="Например: Кинезиология · остеопатия · P-DTR · энергопсихология · биорезонансная диагностика",
+    )
     image = ImageChooserBlock(required=True, label="Фоновое изображение")
 
     class Meta:
